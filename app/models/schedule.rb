@@ -1,13 +1,6 @@
 class Schedule < ApplicationRecord
-    
-    
-    
-    
-    
-    
-    
     def self.searchAPI(type,params)
-        return self.all if params.empty?
+        return self.all unless params.to_s.length > 0
 
         case type
         when "fr" then
@@ -19,10 +12,8 @@ class Schedule < ApplicationRecord
             end
             
             schedules.uniq
-        when "title" then
+        when "position" then
             self.where(title: params)
-        when "limit" then
-            self.limit(params.to_i)
         end
     end
 end
