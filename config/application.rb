@@ -34,7 +34,14 @@ module NurtureAPI
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     
-    config.session_store :cookie_store,
-        key: '_nurture_api_session'
+    # Permit cross origin
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins "localhost:3000", "java.cse.ce.nihon-u.ac.jp"
+        resource "*",
+          headers: :any,
+          methods: [:get, :post, :options, :head]
+      end
+    end
   end
 end
