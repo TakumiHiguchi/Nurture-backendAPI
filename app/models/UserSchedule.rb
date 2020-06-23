@@ -1,0 +1,25 @@
+
+
+class UserSchedule
+    def setSchedule(user_id)
+        result = (0...10).map{(0...2).map{(0..6).map{Array.new(7,0)}}} #スケジュール配列の作成し、0で初期化
+        
+        #ユーザーのスケジュールを取得
+        schedule = User.joins(:schedules).select('users.*, schedules.*, user_schedule_relations.*').where("users.id = ?", user_id)
+        
+        schedule.each do |sc|
+            position = sc.position
+            if sc.semester = "前学期"
+                ins = {title: sc.title, CoNum: sc.CoNum, teacher:sc.teacher, semester: sc.semester, position: sc.position, grade: sc.grade, status: sc.status}
+                result[(sc.reges_grade.to_i - 1)][0][position / 7][position % 7] = ins
+            else
+                ins = {title: sc.title, CoNum: sc.CoNum, teacher:sc.teacher, semester: sc.semester, position: sc.position, grade: sc.grade, status: sc.status}
+                result[(sc.reges_grade.to_i - 1)][1][position / 7][position % 7] = ins
+            end
+        end
+        
+        mes= "ユーザーのスケジュールをレスポンスしました。"
+        
+        return result,mes
+    end
+end

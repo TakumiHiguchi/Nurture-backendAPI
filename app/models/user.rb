@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+    has_many :user_schedule_relations
+    has_many :schedules, through: :user_schedule_relations
+    
     def self.exists_and_create(key,ses)
         maxAge = Time.now.to_i + 3600
         if user = self.find_by(key:key)

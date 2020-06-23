@@ -7,17 +7,18 @@ class Api::V1::UserController < ApplicationController
         userData = user.userData(params[:token])
         
         if !userData.nil?
-            userKey = Digest::SHA256.hexdigest(userData["email"] + userData["sub"] + "Google")
-            userName = userData["name"]
-            pictureURL = userData["picture"]
-            session = Digest::SHA256.hexdigest(rand(1000000000).to_s + userKey + Time.now.to_i.to_s)
-            
-            user,ex,sessionAge = User.exists_and_create(userKey,session)
-            
-            ex ? mes="お帰りなさい#{userName}さん" : mes="こんにちは。#{userName}さん"
-            
+            if params[:sns] == "google"
+                userKey = Digest::SHA256.hexdigest(userData["email"] + userData["sub"] + "Google")
+                userName = userData["name"]
+                pictureURL = userData["picture"]
+                session = Digest::SHA256.hexdigest(rand(1000000000).to_s + userKey + Time.now.to_i.to_s)
+                
+                user,ex,sessionAge = User.exists_and_create(userKey,session)
+                
+                ex ? mes="お帰りなさい#{userName}さん" : mes="こんにちは。#{userName}さん"
+            end
             render json: JSON.pretty_generate({
-                                              status:'SUCESS',
+                                              status:'SUCCESS',
                                               api_version: 'v1',
                                               mes:mes,
                                               userKey: userKey,
@@ -31,6 +32,72 @@ class Api::V1::UserController < ApplicationController
                                               status:'ERROR',
                                               api_version: 'v1',
                                               mes:"ログインに失敗しました。",
+            })
+        end
+    end
+    
+    def setUserSchedule
+        userSession = false
+        schedule = Schedule.find_by(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade])
+        
+        #sessionの確認
+        user = User.find_by(key: params[:key],session: params[:session])
+        userSession = user.maxAge.to_i > Time.now.to_i if user
+        
+        #scheduleがなかった場合作る
+        schedule = Schedule.create(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade]) if schedule.nil?
+        
+        if userSession
+            #Relationを作る
+            relation,result,mes = UserScheduleRelation.exists_and_create(user.id, schedule, params[:user_grade].to_i)
+            p params[:user_grade]
+        else
+            result = false
+            mes = "セッションが無効です"
+        end
+        
+        if result
+            render json: JSON.pretty_generate({
+                                              status:'SUCCESS',
+                                              api_version: 'v1',
+                                              mes: mes
+            })
+        else
+            render json: JSON.pretty_generate({
+                                              status:'ERROR',
+                                              api_version: 'v1',
+                                              mes: mes
+            })
+        end
+    end
+    
+    def loadSchedule
+        #sessionの確認
+        user = User.find_by(key: params[:key],session: params[:session])
+        userSession = user.maxAge.to_i > Time.now.to_i if user
+        
+        if userSession
+            #sessionが有効だったらユーザーのスケジュールを返す
+            userSchedule = UserSchedule.new
+            result, mes = userSchedule.setSchedule(user.id)
+            
+        else
+            result = false
+            mes = "セッションが無効です"
+        end
+        
+        if result
+            render json: JSON.pretty_generate({
+                                              status:'SUCCESS',
+                                              api_version: 'v1',
+                                              mes: mes,
+                                              schedules: result
+            })
+        else
+            render json: JSON.pretty_generate({
+                                              status:'ERROR',
+                                              api_version: 'v1',
+                                              mes: mes
             })
         end
     end

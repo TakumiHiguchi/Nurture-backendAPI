@@ -1,4 +1,11 @@
 class Schedule < ApplicationRecord
+    has_many :user_schedule_relations
+    has_many :users, through: :user_schedule_relations
+    
+    validates :title, length: { in: 1..150 }
+    validates :teacher, length: { in: 1..30 }
+    validates :semester, length: { in: 1..10 }
+    
     def self.searchAPI(type,params)
         return self.all unless params.to_s.length > 0
 
