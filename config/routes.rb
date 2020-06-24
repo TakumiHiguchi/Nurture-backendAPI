@@ -4,7 +4,8 @@ Rails.application.routes.draw do
             resources :schedule
             get 'userLogin' =>  'user#login'
             post 'setUserSchedule' => 'user#setUserSchedule'
-            get 'loadSchedule' =>  'user#loadSchedule'
+            get 'loadUserDetail' =>  'user#loadUserDetail'
+            post 'setGrade' => 'setting#setGrade'
         end
     end
 end

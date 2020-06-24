@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  fh_semester_f: 2020-06-24 10:37:51
+  fh_semester_s: 2020-06-24 10:37:51
+  late_semester_f: 2020-06-24 10:37:51
+  late_semmester_s: 2020-06-24 10:37:51
+
+two:
+  user_id: 1
+  fh_semester_f: 2020-06-24 10:37:51
+  fh_semester_s: 2020-06-24 10:37:51
+  late_semester_f: 2020-06-24 10:37:51
+  late_semmester_s: 2020-06-24 10:37:51

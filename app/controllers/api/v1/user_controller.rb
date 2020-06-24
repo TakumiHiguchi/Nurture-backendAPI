@@ -50,7 +50,6 @@ class Api::V1::UserController < ApplicationController
         if userSession
             #Relationを作る
             relation,result,mes = UserScheduleRelation.exists_and_create(user.id, schedule, params[:user_grade].to_i)
-            p params[:user_grade]
         else
             result = false
             mes = "セッションが無効です"
@@ -71,27 +70,28 @@ class Api::V1::UserController < ApplicationController
         end
     end
     
-    def loadSchedule
+    def loadUserDetail
         #sessionの確認
         user = User.find_by(key: params[:key],session: params[:session])
         userSession = user.maxAge.to_i > Time.now.to_i if user
         
         if userSession
             #sessionが有効だったらユーザーのスケジュールを返す
-            userSchedule = UserSchedule.new
-            result, mes = userSchedule.setSchedule(user.id)
+            userDetail = UserDetail.new
+            result_schedule, mes = userDetail.setSchedule(user.id)
+            
             
         else
-            result = false
+            result_schedule = false
             mes = "セッションが無効です"
         end
         
-        if result
+        if result_schedule
             render json: JSON.pretty_generate({
                                               status:'SUCCESS',
                                               api_version: 'v1',
                                               mes: mes,
-                                              schedules: result
+                                              schedules: result_schedule
             })
         else
             render json: JSON.pretty_generate({

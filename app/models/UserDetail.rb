@@ -1,8 +1,8 @@
 
 
-class UserSchedule
+class UserDetail
     def setSchedule(user_id)
-        result = (0...10).map{(0...2).map{(0..6).map{Array.new(7,0)}}} #スケジュール配列の作成し、0で初期化
+        result = (0...10).map{(0...2).map{(0..6).map{Array.new(6,0)}}} #スケジュール配列の作成し、0で初期化
         
         #ユーザーのスケジュールを取得
         schedule = User.joins(:schedules).select('users.*, schedules.*, user_schedule_relations.*').where("users.id = ?", user_id)
@@ -22,4 +22,9 @@ class UserSchedule
         
         return result,mes
     end
+    
+    def loadSemester
+        
+    end
+    
 end

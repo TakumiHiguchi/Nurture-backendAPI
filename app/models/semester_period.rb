@@ -1,0 +1,2 @@
+class SemesterPeriod < ApplicationRecord
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_22_193318) do
+ActiveRecord::Schema.define(version: 2020_06_24_013751) do
 
   create_table "schedules", force: :cascade do |t|
     t.string "title"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 2020_06_22_193318) do
     t.integer "position"
     t.integer "grade"
     t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "semester_periods", force: :cascade do |t|
+    t.integer "user_id"
+    t.datetime "fh_semester_f"
+    t.datetime "fh_semester_s"
+    t.datetime "late_semester_f"
+    t.datetime "late_semmester_s"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -35,7 +45,8 @@ ActiveRecord::Schema.define(version: 2020_06_22_193318) do
   create_table "users", force: :cascade do |t|
     t.string "key"
     t.string "session"
-    t.string "maxAge"
+    t.integer "maxAge"
+    t.integer "grade"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
