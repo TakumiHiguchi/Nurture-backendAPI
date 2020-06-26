@@ -6,6 +6,7 @@ Rails.application.routes.draw do
             post 'setUserSchedule' => 'user#setUserSchedule'
             get 'loadUserDetail' =>  'user#loadUserDetail'
             post 'setGrade' => 'setting#setGrade'
+            post 'setSemesterDate' => 'setting#setSemesterDate'
         end
     end
 end

@@ -17,6 +17,13 @@ class Api::V1::UserController < ApplicationController
                 
                 ex ? mes="お帰りなさい#{userName}さん" : mes="こんにちは。#{userName}さん"
             end
+            
+            #ユーザーの情報を取得
+            u = User.find_by(key: userKey,session: session)
+            
+            #ユーザが登録した学期の期間を整形して配列で返す処理
+            semesterDate = SemesterPeriod.loadUserPeriod(u.id)
+            
             render json: JSON.pretty_generate({
                                               status:'SUCCESS',
                                               api_version: 'v1',
@@ -25,7 +32,9 @@ class Api::V1::UserController < ApplicationController
                                               userName: userName,
                                               pictureURL: pictureURL,
                                               session: session,
-                                              maxAge: sessionAge
+                                              maxAge: sessionAge,
+                                              grade: u.grade,
+                                              semesterPeriod: semesterDate
             })
         else
             render json: JSON.pretty_generate({

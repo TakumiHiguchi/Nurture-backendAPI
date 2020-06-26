@@ -26,10 +26,11 @@ ActiveRecord::Schema.define(version: 2020_06_24_013751) do
 
   create_table "semester_periods", force: :cascade do |t|
     t.integer "user_id"
-    t.datetime "fh_semester_f"
-    t.datetime "fh_semester_s"
-    t.datetime "late_semester_f"
-    t.datetime "late_semmester_s"
+    t.integer "grade"
+    t.date "fh_semester_f"
+    t.date "fh_semester_s"
+    t.date "late_semester_f"
+    t.date "late_semmester_s"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
