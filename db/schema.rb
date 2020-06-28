@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_013751) do
     t.string "teacher"
     t.string "semester"
     t.integer "position"
-    t.integer "grade"
+    t.integer "grade", default: 1
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_013751) do
     t.date "fh_semester_f"
     t.date "fh_semester_s"
     t.date "late_semester_f"
-    t.date "late_semmester_s"
+    t.date "late_semester_s"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_013751) do
     t.string "key"
     t.string "session"
     t.integer "maxAge"
-    t.integer "grade"
+    t.integer "grade", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

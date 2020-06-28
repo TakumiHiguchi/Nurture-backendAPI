@@ -6,7 +6,7 @@ class CreateSemesterPeriods < ActiveRecord::Migration[6.0]
       t.date :fh_semester_f
       t.date :fh_semester_s
       t.date :late_semester_f
-      t.date :late_semmester_s
+      t.date :late_semester_s
 
       t.timestamps
     end

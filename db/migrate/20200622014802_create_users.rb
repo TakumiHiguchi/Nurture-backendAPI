@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :key
       t.string :session
       t.integer :maxAge
-      t.integer :grade
+      t.integer :grade, default: 1
       
       t.timestamps
     end

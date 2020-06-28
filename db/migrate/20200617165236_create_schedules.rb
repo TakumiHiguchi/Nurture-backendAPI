@@ -6,7 +6,7 @@ class CreateSchedules < ActiveRecord::Migration[6.0]
       t.string :teacher
       t.string :semester
       t.integer :position
-      t.integer :grade
+      t.integer :grade, default: 1
       t.string :status
 
       t.timestamps

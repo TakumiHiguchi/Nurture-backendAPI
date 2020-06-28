@@ -34,13 +34,13 @@ class Api::V1::SettingController < ApplicationController
         user = User.find_by(key: params[:key],session: params[:session])
         userSession = user.maxAge.to_i > Time.now.to_i if user
         
-        if userSession && params[:date1] < params[:date2] && params[:date2] < params[:date3] && params[:date3] < params[:date4]
+        if userSession && Time.parse(params[:date1]) < Time.parse(params[:date2]) && Time.parse(params[:date2]) < Time.parse(params[:date3]) && Time.parse(params[:date3]) < Time.parse(params[:date4])
             sP = SemesterPeriod.find_by(user_id: user.id,grade:params[:grade])
             if !sP
-                result = SemesterPeriod.create(user_id:user.id, grade:params[:grade], fh_semester_f:params[:date1], fh_semester_s:params[:date2], late_semester_f:params[:date3], late_semmester_s:params[:date4])
+                result = SemesterPeriod.create(user_id:user.id, grade:params[:grade], fh_semester_f:params[:date1], fh_semester_s:params[:date2], late_semester_f:params[:date3], late_semester_s:params[:date4])
                 mes = "期間を新しく作りました。"
             else
-                result = sP.update(user_id:user.id, grade:params[:grade], fh_semester_f:params[:date1], fh_semester_s:params[:date2], late_semester_f:params[:date3], late_semmester_s:params[:date4])
+                result = sP.update(user_id:user.id, grade:params[:grade], fh_semester_f:params[:date1], fh_semester_s:params[:date2], late_semester_f:params[:date3], late_semester_s:params[:date4])
                 mes = "期間を更新しました。"
             end
             
