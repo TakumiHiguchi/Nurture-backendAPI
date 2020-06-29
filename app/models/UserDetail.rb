@@ -11,10 +11,10 @@ class UserDetail
             position = sc.position
             if sc.semester = "前学期"
                 ins = {title: sc.title, CoNum: sc.CoNum, teacher:sc.teacher, semester: sc.semester, position: sc.position, grade: sc.grade, status: sc.status}
-                result[(sc.reges_grade.to_i - 1)][0][position / 7][position % 7] = ins
+                result[(sc.reges_grade.to_i - 1)][0][position / 6][position % 6] = ins
             else
                 ins = {title: sc.title, CoNum: sc.CoNum, teacher:sc.teacher, semester: sc.semester, position: sc.position, grade: sc.grade, status: sc.status}
-                result[(sc.reges_grade.to_i - 1)][1][position / 7][position % 7] = ins
+                result[(sc.reges_grade.to_i - 1)][1][position / 6][position % 6] = ins
             end
         end
         
