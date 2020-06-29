@@ -35,13 +35,5 @@ module NurtureAPI
     config.api_only = true
     
     # Permit cross origin
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins "java.cse.ce.nihon-u.ac.jp", "localhost:3000" , "http://java.cse.ce.nihon-u.ac.jp"
-        resource "*",
-          headers: :any,
-          methods: [:get, :post, :options, :head]
-      end
-    end
   end
 end
