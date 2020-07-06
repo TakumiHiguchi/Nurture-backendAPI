@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_24_013751) do
+ActiveRecord::Schema.define(version: 2020_07_06_102908) do
 
   create_table "schedules", force: :cascade do |t|
     t.string "title"
@@ -39,6 +39,16 @@ ActiveRecord::Schema.define(version: 2020_06_24_013751) do
     t.integer "schedule_id"
     t.integer "user_id"
     t.integer "reges_grade"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_tasks", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "title"
+    t.text "content"
+    t.date "taskDate"
+    t.integer "position"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

@@ -48,3 +48,61 @@ Schedule.create!(
     status: "コース選択必修 コース選択"
   )
 end
+Schedule.create!(
+  [
+    {
+      title:"人工知能1",
+      CoNum:"G610628101",
+      teacher:"和泉　勇治",
+      semester:"後学期",
+      position:8,
+      grade:3,
+      status: "コース選択必修 コース選択"
+    },
+    {
+      title:"人工知能1",
+      CoNum:"G610628101",
+      teacher:"和泉　勇治",
+      semester:"後学期",
+      position:16,
+      grade:3,
+      status: "コース選択必修 コース選択"
+    },
+    {
+      title:"人工知能1",
+      CoNum:"G610628101",
+      teacher:"和泉　勇治",
+      semester:"後学期",
+      position:24,
+      grade:3,
+      status: "コース選択必修 コース選択"
+    },
+    {
+      title:"人工知能1",
+      CoNum:"G610628101",
+      teacher:"和泉　勇治",
+      semester:"後学期",
+      position:32,
+      grade:3,
+      status: "コース選択必修 コース選択"
+    },
+    {
+      title:"人工知能1",
+      CoNum:"G610628101",
+      teacher:"和泉　勇治",
+      semester:"後学期",
+      position:40,
+      grade:3,
+      status: "コース選択必修 コース選択"
+    },
+    {
+      title:"人工知能1",
+      CoNum:"G610628101",
+      teacher:"和泉　勇治",
+      semester:"後学期",
+      position:48,
+      grade:3,
+      status: "コース選択必修 コース選択"
+    }
+  ]
+)

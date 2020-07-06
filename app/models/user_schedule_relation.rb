@@ -5,7 +5,7 @@ class UserScheduleRelation < ApplicationRecord
     def self.exists_and_create(user_id, sc, user_grade)
         if sc
             #スケジュールがある場合
-            reSc = User.joins(:schedules).select("users.*, schedules.*, user_schedule_relations.reges_grade").where("users.id = ?", user_id).where("schedules.position = ?", sc.position).where("user_schedule_relations.reges_grade = ?", user_grade)
+            reSc = User.joins(:schedules).select("users.*, schedules.*, user_schedule_relations.reges_grade").where("users.id = ?", user_id).where("schedules.position = ?", sc.position).where("schedules.semester = ?", sc.semester).where("user_schedule_relations.reges_grade = ?", user_grade)
             
             if reSc.length > 0
                 return nil,false,"既にスケジュールが登録されています。登録を削除してから再度お試しください。"

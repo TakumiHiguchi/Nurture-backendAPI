@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  title: MyString
+  content: MyText
+  taskDate: 2020-07-06
+  position: 1
+
+two:
+  user_id: 1
+  title: MyString
+  content: MyText
+  taskDate: 2020-07-06
+  position: 1

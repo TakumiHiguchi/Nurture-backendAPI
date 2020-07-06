@@ -34,6 +34,7 @@ class Api::V1::UserController < ApplicationController
                                               session: session,
                                               maxAge: sessionAge,
                                               grade: u.grade,
+                                              created_at: u.created_at,
                                               semesterPeriod: semesterDate
             })
         else
