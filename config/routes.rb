@@ -3,6 +3,7 @@ Rails.application.routes.draw do
         namespace 'v1' do
             resources :schedule
             resources :task ,only:[:index,:create,:update]
+            resources :exam ,only:[:index,:create,:update]
             get 'userLogin' =>  'user#login'
             post 'setUserSchedule' => 'user#setUserSchedule'
             get 'loadUserDetail' =>  'user#loadUserDetail'

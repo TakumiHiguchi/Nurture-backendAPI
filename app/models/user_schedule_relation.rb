@@ -8,13 +8,13 @@ class UserScheduleRelation < ApplicationRecord
             reSc = User.joins(:schedules).select("users.*, schedules.*, user_schedule_relations.reges_grade").where("users.id = ?", user_id).where("schedules.position = ?", sc.position).where("schedules.semester = ?", sc.semester).where("user_schedule_relations.reges_grade = ?", user_grade)
             
             if reSc.length > 0
-                return nil,false,"既にスケジュールが登録されています。登録を削除してから再度お試しください。"
+                return nil,false,"既に登録されています。"
             else
                 return self.create(schedule_id: sc.id, user_id: user_id, reges_grade: user_grade),true,"スケジュールの登録が完了しました。"
             end
         else
             #スケジュールがなかった場合の処理
-            return nil,false,"スケジュールがありませんでした。再度お試しください。"
+            return nil,false,"スケジュールがありませんでした。"
         end
     end
 end

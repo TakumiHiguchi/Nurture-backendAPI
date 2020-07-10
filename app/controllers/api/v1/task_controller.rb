@@ -31,10 +31,11 @@ class Api::V1::TaskController < ApplicationController
 
                 
                 ins = {
+                    id:t.id,
                     title:t.title,
                     content:t.content,
                     date:t.taskDate,
-                    position:t.taskDate
+                    position:t.position
                 }
                 reIns2.push(ins)
                 result[t.taskDate.strftime("%Y").to_i][t.taskDate.strftime("%m").to_i][t.taskDate.strftime("%d").to_i] = reIns2
@@ -70,6 +71,7 @@ class Api::V1::TaskController < ApplicationController
         if @userSession
             #sessionが有効だったらタスクを作る
             result = UserTask.create(user_id:@user.id, title: params[:title], content: params[:content], taskDate:params[:taskdate], position:params[:position])
+            result = result.save
             if result
                 mes = "タスクを作成しました"
             else
