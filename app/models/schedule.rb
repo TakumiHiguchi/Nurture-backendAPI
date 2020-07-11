@@ -1,6 +1,7 @@
 class Schedule < ApplicationRecord
     has_many :user_schedule_relations
     has_many :users, through: :user_schedule_relations
+    has_many :change_schedules
     
     validates :title, length: { in: 1..150 }
     validates :teacher, length: { in: 1..30 }
