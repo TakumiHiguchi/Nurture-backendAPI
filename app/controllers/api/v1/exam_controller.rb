@@ -34,7 +34,8 @@ class Api::V1::ExamController < ApplicationController
                     title:t.title,
                     content:t.content,
                     date:t.examDate,
-                    position:t.position
+                    position:t.position,
+                    label:"試験"
                 }
                 reIns2.push(ins)
                 result[t.examDate.strftime("%Y").to_i][t.examDate.strftime("%m").to_i][t.examDate.strftime("%d").to_i] = reIns2

@@ -1,4 +1,4 @@
-class Api::V1::ScheduleController < ApplicationController
+class Api::V1::UserScheduleController < ApplicationController
     before_action :userSignedin?, only: [:create,:update,:destroy] #セッションの確認
     
   def index
@@ -38,7 +38,23 @@ class Api::V1::ScheduleController < ApplicationController
   end
   
     def destroy
-
+        p "a"
+        p params
+        ins = UserScheduleRelation.find_by(user_id:@user.id,schedule_id:params[:schedule_id],reges_grade:params[:grade])
+        if ins.destroy
+            render json: JSON.pretty_generate({
+                                              status:'SUCCESS',
+                                              api_version: 'v1'
+          
+                                              })
+        else
+            render json: JSON.pretty_generate({
+                                                status:'Error',
+                                                api_version: 'v1',
+                                                mes: 'スケジュールの削除に失敗しました。'
+            
+                                                })
+        end
       
   end
 end

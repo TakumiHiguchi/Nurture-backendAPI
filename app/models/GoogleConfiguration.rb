@@ -12,6 +12,7 @@ class GoogleConfiguration
     def userData(token)
         aud = ['653992313170-okt2tfmukp5eg4s4g8fiaf6u3261a0ov.apps.googleusercontent.com']
         iss = ['accounts.google.com']
+        
         #トークンのヘッダーを取得
         token_header = decodeTokenHeader(token)
         

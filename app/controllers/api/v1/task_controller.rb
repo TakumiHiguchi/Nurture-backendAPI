@@ -35,7 +35,8 @@ class Api::V1::TaskController < ApplicationController
                     title:t.title,
                     content:t.content,
                     date:t.taskDate,
-                    position:t.position
+                    position:t.position,
+                    label:"タスク"
                 }
                 reIns2.push(ins)
                 result[t.taskDate.strftime("%Y").to_i][t.taskDate.strftime("%m").to_i][t.taskDate.strftime("%d").to_i] = reIns2

@@ -9,9 +9,14 @@ class ChangeSchedule < ApplicationRecord
     
     def self.check_and_create(user_id, schedule_id, beforeDate, afterDate, position)
         check = ChangeSchedule.joins(:schedule).select("change_schedules.* ,schedules.*").where(user_id:user_id, schedule_id:schedule_id, beforeDate:beforeDate).where("schedules.id LIKE ?", schedule_id)
+        check1 = ChangeSchedule.where(user_id:user_id,afterDate:afterDate, position:position)
         if check.length > 0
             result = nil
             mes = "授業は既に移動されています。"
+            return result,mes
+        elsif check1.length > 0
+            result = nil
+            mes = "移動先には授業変更が既に登録されています。"
             return result,mes
         else
             result = self.create(user_id:user_id, schedule_id:schedule_id, beforeDate:beforeDate, afterDate:afterDate, position:position)
