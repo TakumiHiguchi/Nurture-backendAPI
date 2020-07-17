@@ -38,14 +38,12 @@ class Api::V1::UserScheduleController < ApplicationController
   end
   
     def destroy
-        p "a"
-        p params
         ins = UserScheduleRelation.find_by(user_id:@user.id,schedule_id:params[:schedule_id],reges_grade:params[:grade])
         if ins.destroy
             render json: JSON.pretty_generate({
                                               status:'SUCCESS',
-                                              api_version: 'v1'
-          
+                                              api_version: 'v1',
+                                              mes:"スケジュールを削除しました。"
                                               })
         else
             render json: JSON.pretty_generate({

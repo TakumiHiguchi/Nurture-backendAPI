@@ -1,6 +1,6 @@
 class Api::V1::TaskController < ApplicationController
     
-    before_action :userSignedin?, only: [:index,:create,:update] #セッションの確認
+    before_action :userSignedin?, only: [:index,:create,:update,:destroy] #セッションの確認
     
     def index
         if @userSession
@@ -98,5 +98,23 @@ class Api::V1::TaskController < ApplicationController
         end
     end
     def update
+    end
+    def destroy
+          ins = UserTask.find_by(user_id:@user.id,id:params[:task_id])
+          if ins.destroy
+              render json: JSON.pretty_generate({
+                                                status:'SUCCESS',
+                                                api_version: 'v1',
+                                                mes:"タスクを削除しました。"
+                                                })
+          else
+              render json: JSON.pretty_generate({
+                                                  status:'Error',
+                                                  api_version: 'v1',
+                                                  mes: 'タスクの削除に失敗しました。'
+              
+                                                  })
+          end
+        
     end
 end

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
             resources :user_schedule, only:[:index,:create,:update]
             delete 'user_schedule' => 'user_schedule#destroy'
             resources :task ,only:[:index,:create,:update]
+            delete 'task' => 'task#destroy'
             resources :exam ,only:[:index,:create,:update]
             resources :change_schedule ,only:[:index,:create,:update]
             get 'userLogin' =>  'user#login'
