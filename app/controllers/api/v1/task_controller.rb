@@ -112,7 +112,6 @@ class Api::V1::TaskController < ApplicationController
                                                 status:'Error',
                                                 api_version: 'v1',
                                                 mes: 'タスクの更新に失敗しました。'
-            
                                                 })
         end
     end

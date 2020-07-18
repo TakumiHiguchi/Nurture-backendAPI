@@ -8,6 +8,7 @@ Rails.application.routes.draw do
             delete 'task' => 'task#destroy'
             patch 'task' => 'task#update'
             delete 'exam' => 'exam#destroy'
+            patch 'exam' => 'exam#update'
             resources :exam ,only:[:index,:create,:update]
             resources :change_schedule ,only:[:index,:create,:update]
             get 'userLogin' =>  'user#login'

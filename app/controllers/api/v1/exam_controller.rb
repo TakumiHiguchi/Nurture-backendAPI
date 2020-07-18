@@ -4,10 +4,10 @@ class Api::V1::ExamController < ApplicationController
     def index
         if @userSession
             #sessionが有効だったらユーザーの試験を返す
-            task = Exam.where(user_id:@user.id)
+            exam = Exam.where(user_id:@user.id).order(complete:"ASC")
             result = {}
             
-            task.each do |t|
+            exam.each do |t|
                 #年:月:日をkeyに持つhashを生成し、そこに試験内容をpushしていく
                 #年の作成
                 reIns = result[t.examDate.strftime("%Y").to_i]
@@ -35,6 +35,7 @@ class Api::V1::ExamController < ApplicationController
                     content:t.content,
                     date:t.examDate,
                     position:t.position,
+                    complete:t.complete,
                     label:"試験"
                 }
                 reIns2.push(ins)
@@ -91,6 +92,22 @@ class Api::V1::ExamController < ApplicationController
     end
 
     def update
+        ins = Exam.find_by(user_id:@user.id,id:params[:exam_id])
+        ins = ins.update(user_id:@user.id, title: params[:title], content: params[:content], examDate:params[:examdate], position:params[:position],complete:params[:complete])
+        if ins
+            render json: JSON.pretty_generate({
+                                              status:'SUCCESS',
+                                              api_version: 'v1',
+                                              mes:"試験を更新しました。"
+                                              })
+        else
+            render json: JSON.pretty_generate({
+                                                status:'Error',
+                                                api_version: 'v1',
+                                                mes: '試験の更新に失敗しました。'
+            
+                                                })
+        end
     end
     def destroy
           ins = Exam.find_by(user_id:@user.id,id:params[:exam_id])

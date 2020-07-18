@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2020_07_11_004749) do
     t.text "content"
     t.date "examDate"
     t.integer "position"
+    t.boolean "complete", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
