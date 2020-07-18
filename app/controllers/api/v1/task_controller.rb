@@ -5,7 +5,7 @@ class Api::V1::TaskController < ApplicationController
     def index
         if @userSession
             #sessionが有効だったらユーザーのタスクを返す
-            task = UserTask.where(user_id:@user.id)
+            task = UserTask.where(user_id:@user.id).order(complete:"ASC")
             result = {}
             
             task.each do |t|
@@ -36,6 +36,7 @@ class Api::V1::TaskController < ApplicationController
                     content:t.content,
                     date:t.taskDate,
                     position:t.position,
+                    complete:t.complete,
                     label:"タスク"
                 }
                 reIns2.push(ins)
@@ -98,6 +99,22 @@ class Api::V1::TaskController < ApplicationController
         end
     end
     def update
+        ins = UserTask.find_by(user_id:@user.id,id:params[:task_id])
+        ins = ins.update(user_id:@user.id, title: params[:title], content: params[:content], taskDate:params[:taskdate], position:params[:position],complete:params[:complete])
+        if ins
+            render json: JSON.pretty_generate({
+                                              status:'SUCCESS',
+                                              api_version: 'v1',
+                                              mes:"タスクを更新しました。"
+                                              })
+        else
+            render json: JSON.pretty_generate({
+                                                status:'Error',
+                                                api_version: 'v1',
+                                                mes: 'タスクの更新に失敗しました。'
+            
+                                                })
+        end
     end
     def destroy
           ins = UserTask.find_by(user_id:@user.id,id:params[:task_id])

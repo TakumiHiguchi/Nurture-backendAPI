@@ -4,8 +4,9 @@ Rails.application.routes.draw do
             resources :schedule
             resources :user_schedule, only:[:index,:create,:update]
             delete 'user_schedule' => 'user_schedule#destroy'
-            resources :task ,only:[:index,:create,:update]
+            resources :task ,only:[:index,:create]
             delete 'task' => 'task#destroy'
+            patch 'task' => 'task#update'
             delete 'exam' => 'exam#destroy'
             resources :exam ,only:[:index,:create,:update]
             resources :change_schedule ,only:[:index,:create,:update]

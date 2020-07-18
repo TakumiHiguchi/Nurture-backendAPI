@@ -6,6 +6,7 @@ class CreateUserTasks < ActiveRecord::Migration[6.0]
       t.text :content
       t.date :taskDate
       t.integer :position
+      t.boolean :complete, default: false
 
       t.timestamps
     end
