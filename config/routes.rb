@@ -12,6 +12,7 @@ Rails.application.routes.draw do
             resources :exam ,only:[:index,:create,:update]
             delete 'change_schedule' => 'change_schedule#destroy'
             resources :change_schedule ,only:[:index,:create,:update]
+            resources :news, only:[:index]
             get 'userLogin' =>  'user#login'
             post 'setUserSchedule' => 'user#setUserSchedule'
             get 'loadUserDetail' =>  'user#loadUserDetail'
