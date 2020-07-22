@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
     namespace 'api' do
         namespace 'v1' do
-            resources :schedule
+            resources :schedule, only:[:index,:create]
             resources :user_schedule, only:[:index,:create,:update]
             delete 'user_schedule' => 'user_schedule#destroy'
             resources :task ,only:[:index,:create]
