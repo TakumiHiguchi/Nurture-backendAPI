@@ -13,7 +13,7 @@ class ChangeSchedule < ApplicationRecord
         afterDate.gsub!("/","-")
         
         #すでに移動済みかのチェック
-        check = ChangeSchedule.joins(:schedule).select("change_schedules.* ,schedules.*").where(user_id:user_id, schedule_id:schedule_id, beforeDate:beforeDate).where("schedules.id LIKE ?", schedule_id)
+        check = ChangeSchedule.joins(:schedule).select("change_schedules.* ,schedules.*").where(user_id:user_id, schedule_id:schedule_id, beforeDate:beforeDate)
         check1 = ChangeSchedule.where(user_id:user_id,afterDate:afterDate, position:position)
         
         if check.length > 0
