@@ -1,10 +1,10 @@
 class Api::V1::ChangeScheduleController < ApplicationController
-    before_action :userSignedin?, only: [:index,:create,:update] #セッションの確認
+    before_action :userSignedin?, only: [:index,:create,:update,:destroy] #セッションの確認
     
     def index
         if @userSession
             #sessionが有効だったらユーザーの試験を返す
-            changeSchedule = ChangeSchedule.joins(:schedule).select("change_schedules.* ,schedules.* ,change_schedules.position AS change_schedules_id").where(user_id:@user.id)
+            changeSchedule = ChangeSchedule.joins(:schedule).select("change_schedules.* ,schedules.* ,change_schedules.position AS change_schedules_position, change_schedules.id AS change_schedules_id").where(user_id:@user.id)
             result = {}
             result1 = {}
             
@@ -15,25 +15,25 @@ class Api::V1::ChangeScheduleController < ApplicationController
                 dkArray1 = DateKeysArray.new
                 result1 = dkArray1.createDateKeysArray(result1, t.beforeDate)
                 ins = {
-                    id:t.id,
+                    id:t.change_schedules_id,
                     title:t.title,
                     CoNum:t.CoNum,
                     teacher:t.teacher,
                     semester:t.semester,
-                    after_position:t.change_schedules_id,
+                    after_position:t.change_schedules_position,
                     grade:t.grade,
                     status:t.status,
                     afterDate:t.afterDate
                 }
                 result[t.afterDate.strftime("%Y").to_i][t.afterDate.strftime("%m").to_i][t.afterDate.strftime("%d").to_i].push(ins)
                 ins = {
-                    id:t.id,
+                    id:t.change_schedules_id,
                     title:t.title,
                     CoNum:t.CoNum,
                     teacher:t.teacher,
                     semester:t.semester,
                     before_position:t.position,
-                    after_position:t.change_schedules_id,
+                    after_position:t.change_schedules_position,
                     afterDate:t.afterDate,
                     grade:t.grade,
                     status:t.status,
@@ -93,5 +93,23 @@ class Api::V1::ChangeScheduleController < ApplicationController
     end
 
     def update
+    end
+    def destroy
+          ins = ChangeSchedule.find_by(user_id:@user.id,id:params[:change_schedule_id])
+          if ins.destroy
+              render json: JSON.pretty_generate({
+                                                status:'SUCCESS',
+                                                api_version: 'v1',
+                                                mes:"授業変更を削除しました。"
+                                                })
+          else
+              render json: JSON.pretty_generate({
+                                                  status:'Error',
+                                                  api_version: 'v1',
+                                                  mes: '授業変更の削除に失敗しました。'
+              
+                                                  })
+          end
+        
     end
 end

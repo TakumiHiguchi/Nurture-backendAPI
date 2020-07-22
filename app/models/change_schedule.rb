@@ -8,8 +8,14 @@ class ChangeSchedule < ApplicationRecord
     validates :schedule_id, presence: true
     
     def self.check_and_create(user_id, schedule_id, beforeDate, afterDate, position)
+        #日付を加工する
+        beforeDate.gsub!("/","-")
+        afterDate.gsub!("/","-")
+        
+        #すでに移動済みかのチェック
         check = ChangeSchedule.joins(:schedule).select("change_schedules.* ,schedules.*").where(user_id:user_id, schedule_id:schedule_id, beforeDate:beforeDate).where("schedules.id LIKE ?", schedule_id)
         check1 = ChangeSchedule.where(user_id:user_id,afterDate:afterDate, position:position)
+        
         if check.length > 0
             result = nil
             mes = "授業は既に移動されています。"
