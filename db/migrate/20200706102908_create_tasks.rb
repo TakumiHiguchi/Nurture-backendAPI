@@ -1,7 +1,7 @@
-class CreateUserTasks < ActiveRecord::Migration[6.0]
+class CreateTasks < ActiveRecord::Migration[6.0]
   def change
-    create_table :user_tasks do |t|
-      t.integer :user_id
+    create_table :tasks do |t|
+      t.integer :calendar_id
       t.string :title
       t.text :content
       t.date :taskDate

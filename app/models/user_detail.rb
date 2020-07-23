@@ -1,6 +1,11 @@
+class UserDetail < ApplicationRecord
+    #バリデーション
+    validates :name,    presence: true
+    validates :grade,   presence: true
+    #アソシエーション
+    belongs_to :user
 
 
-class UserDetail
     def setSchedule(user_id)
         result = (0...10).map{(0...2).map{(0..6).map{Array.new(6,0)}}} #スケジュール配列の作成し、0で初期化
         
@@ -21,10 +26,6 @@ class UserDetail
         mes= "ユーザーのスケジュールをレスポンスしました。"
         
         return result,mes
-    end
-    
-    def loadSemester
-        
     end
     
 end

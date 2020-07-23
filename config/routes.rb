@@ -13,11 +13,13 @@ Rails.application.routes.draw do
             delete 'change_schedule' => 'change_schedule#destroy'
             resources :change_schedule ,only:[:index,:create,:update]
             resources :news, only:[:index]
-            get 'userLogin' =>  'user#login'
+            get 'userLogin' =>  'login#login'
             post 'setUserSchedule' => 'user#setUserSchedule'
             get 'loadUserDetail' =>  'user#loadUserDetail'
             post 'setGrade' => 'setting#setGrade'
             post 'setSemesterDate' => 'setting#setSemesterDate'
+            
+            resources :calendar, only:[:index,:create,:update]
             
         end
     end

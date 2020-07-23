@@ -1,5 +1,10 @@
-class UserScheduleRelation < ApplicationRecord
-    belongs_to :user
+class CalendarScheduleRelation < ApplicationRecord
+    #バリデーション
+    validates :schedule_id, presence: true
+    validates :calendar_id, presence: true
+
+    #アソシエーション
+    belongs_to :calendar
     belongs_to :schedule
     
     def self.exists_and_create(user_id, sc, user_grade)

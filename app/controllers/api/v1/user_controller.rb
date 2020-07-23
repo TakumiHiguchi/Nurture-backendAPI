@@ -2,49 +2,7 @@ class Api::V1::UserController < ApplicationController
     require 'digest/sha2' #ハッシュ
     require 'date'
     
-    def login
-        user = GoogleConfiguration.new
-        userData = user.userData(params[:token])
-        
-        if !userData.nil?
-            if params[:sns] == "google"
-                userKey = Digest::SHA256.hexdigest(userData["email"] + userData["sub"] + "Google")
-                userName = userData["name"]
-                pictureURL = userData["picture"]
-                session = Digest::SHA256.hexdigest(rand(1000000000).to_s + userKey + Time.now.to_i.to_s)
-                
-                user,ex,sessionAge = User.exists_and_create(userKey,session)
-                
-                ex ? mes="お帰りなさい#{userName}さん" : mes="こんにちは。#{userName}さん"
-            end
-            
-            #ユーザーの情報を取得
-            u = User.find_by(key: userKey,session: session)
-            
-            #ユーザが登録した学期の期間を整形して配列で返す処理
-            semesterDate = SemesterPeriod.loadUserPeriod(u.id)
-            
-            render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes:mes,
-                                              userKey: userKey,
-                                              userName: userName,
-                                              pictureURL: pictureURL,
-                                              session: session,
-                                              maxAge: sessionAge,
-                                              grade: u.grade,
-                                              created_at: u.created_at,
-                                              semesterPeriod: semesterDate
-            })
-        else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes:"ログインに失敗しました。",
-            })
-        end
-    end
+    
     
     def setUserSchedule
         userSession = false

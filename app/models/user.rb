@@ -1,6 +1,12 @@
 class User < ApplicationRecord
-    has_many :user_schedule_relations
-    has_many :schedules, through: :user_schedule_relations
+    #バリデーション
+    validates :key,        presence: true, length: { maximum: 512 }
+
+    #アソシエーション
+    has_many :user_calendar_relations
+    has_many :calendars, through: :user_calendar_relations
+    has_many :user_details
+    
     
     def self.exists_and_create(key,ses)
         maxAge = Time.now.to_i + 3600

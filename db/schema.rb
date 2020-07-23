@@ -10,11 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_22_033302) do
+ActiveRecord::Schema.define(version: 2020_07_23_033657) do
+
+  create_table "calendar_schedule_relations", force: :cascade do |t|
+    t.integer "schedule_id"
+    t.integer "calendar_id"
+    t.integer "reges_grade"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "calendars", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "shareBool", default: false, null: false
+    t.boolean "cloneBool", default: false, null: false
+    t.string "key"
+    t.integer "author_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "change_schedules", force: :cascade do |t|
     t.integer "schedule_id"
-    t.integer "user_id"
+    t.integer "calendar_id"
     t.date "beforeDate"
     t.date "afterDate"
     t.integer "position"
@@ -23,7 +42,7 @@ ActiveRecord::Schema.define(version: 2020_07_22_033302) do
   end
 
   create_table "exams", force: :cascade do |t|
-    t.integer "user_id"
+    t.integer "calendar_id"
     t.string "title"
     t.text "content"
     t.date "examDate"
@@ -56,7 +75,7 @@ ActiveRecord::Schema.define(version: 2020_07_22_033302) do
   end
 
   create_table "semester_periods", force: :cascade do |t|
-    t.integer "user_id"
+    t.integer "calendar_id"
     t.integer "grade"
     t.date "fh_semester_f"
     t.date "fh_semester_s"
@@ -66,16 +85,8 @@ ActiveRecord::Schema.define(version: 2020_07_22_033302) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "user_schedule_relations", force: :cascade do |t|
-    t.integer "schedule_id"
-    t.integer "user_id"
-    t.integer "reges_grade"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "user_tasks", force: :cascade do |t|
-    t.integer "user_id"
+  create_table "tasks", force: :cascade do |t|
+    t.integer "calendar_id"
     t.string "title"
     t.text "content"
     t.date "taskDate"
@@ -85,11 +96,25 @@ ActiveRecord::Schema.define(version: 2020_07_22_033302) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "user_calendar_relations", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "calendar_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_details", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.integer "grade"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "key"
     t.string "session"
     t.integer "maxAge"
-    t.integer "grade", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
