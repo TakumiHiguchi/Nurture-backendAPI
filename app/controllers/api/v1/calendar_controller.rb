@@ -26,6 +26,7 @@ class Api::V1::CalendarController < ApplicationController
                     shareBool: cal.shareBool,
                     cloneBool: cal.cloneBool,
                     author_id: cal.author_id,
+                    color: cal.color,
                     tasks: tasks,
                     exams: exams,
                     change_schedules_after:cs0,

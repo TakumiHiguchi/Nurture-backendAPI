@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_033657) do
   create_table "calendars", force: :cascade do |t|
     t.string "name"
     t.text "description"
+    t.string "color", default: "#00aced", null: false
     t.boolean "shareBool", default: false, null: false
     t.boolean "cloneBool", default: false, null: false
     t.string "key"
