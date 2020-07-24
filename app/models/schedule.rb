@@ -9,8 +9,8 @@ class Schedule < ApplicationRecord
     validates :status,                      length: { in: 0..100 }
 
     #アソシエーション
-    has_many :schedule_calendar_relations
-    has_many :calendars, through: :schedule_calendar_relations
+    has_many :calendar_schedule_relations
+    has_many :calendars, through: :calendar_schedule_relations
     has_many :change_schedules
     
     def self.searchAPI(type,params)

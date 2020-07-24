@@ -1,39 +1,38 @@
 class Api::V1::UserController < ApplicationController
     require 'digest/sha2' #ハッシュ
     require 'date'
-    
+    before_action :userSignedin?, only: [:setUserSchedule] #セッションの確認
+    before_action :calendarOwn?, only: [:setUserSchedule] #カレンダーの所有者か確認
     
     
     def setUserSchedule
-        userSession = false
-        schedule = Schedule.find_by(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade])
-        
-        #sessionの確認
-        user = User.find_by(key: params[:key],session: params[:session])
-        userSession = user.maxAge.to_i > Time.now.to_i if user
-        
-        #scheduleがなかった場合作る
-        schedule = Schedule.create(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade]) if schedule.nil?
-        
-        if userSession
-            #Relationを作る
-            relation,result,mes = UserScheduleRelation.exists_and_create(user.id, schedule, params[:user_grade].to_i)
+        if @userSession && @calendarOwn
+            schedule = Schedule.find_by(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade])
+            #scheduleがなかった場合作る
+            schedule = Schedule.create(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade]) if schedule.nil?
+            
+            relation,result,mes = CalendarScheduleRelation.exists_and_create(params[:calendarId], schedule, params[:user_grade].to_i)
+
+            
+            if result
+                render json: JSON.pretty_generate({
+                                                status:'SUCCESS',
+                                                api_version: 'v1',
+                                                mes: mes
+                })
+            else
+                render json: JSON.pretty_generate({
+                                                status:'ERROR',
+                                                api_version: 'v1',
+                                                mes: mes
+                })
+            end
         else
-            result = false
             mes = "セッションが無効です"
-        end
-        
-        if result
             render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes: mes
-            })
-        else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes: mes
+                status:'ERROR',
+                api_version: 'v1',
+                mes: mes
             })
         end
     end

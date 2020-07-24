@@ -7,8 +7,8 @@ class Calendar < ApplicationRecord
     #アソシエーション
     has_many :user_calendar_relations
     has_many :users, through: :user_calendar_relations
-    has_many :schedule_calendar_relations
-    has_many :schedules, through: :schedule_calendar_relations
+    has_many :calendar_schedule_relations
+    has_many :schedules, through: :calendar_schedule_relations
     has_many :tasks
     has_many :exams
     has_many :change_schedules
