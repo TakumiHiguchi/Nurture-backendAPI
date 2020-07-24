@@ -1,7 +1,7 @@
 class Api::V1::TaskController < ApplicationController
     
     before_action :userSignedin?, only: [:index,:create,:update,:destroy] #セッションの確認
-    before_action :calendarOwn?, only: [:create] #カレンダーの所有者か確認
+    before_action :calendarOwn?, only: [:create, :update, :destroy] #カレンダーの所有者か確認
     
     def index
         if @userSession
@@ -40,10 +40,10 @@ class Api::V1::TaskController < ApplicationController
         end
     end
     def update
-        if @userSession
+        if @userSession && @calendarOwn
             #sessionが有効だったらタスクを作る
-            ins = UserTask.find_by(user_id:@user.id,id:params[:task_id])
-            ins = ins.update(user_id:@user.id, title: params[:title], content: params[:content], taskDate:params[:taskdate], position:params[:position],complete:params[:complete])
+            ins = Task.find_by(calendar_id:params[:calendarId], id:params[:task_id])
+            ins = ins.update(calendar_id:params[:calendarId], title: params[:title], content: params[:content], taskDate:params[:taskdate], position:params[:position],complete:params[:complete])
             if ins
                 render json: JSON.pretty_generate({
                                                   status:'SUCCESS',
@@ -60,9 +60,9 @@ class Api::V1::TaskController < ApplicationController
         end
     end
     def destroy
-        if @userSession
+        if @userSession && @calendarOwn
         #sessionが有効だったらタスクを作る
-          ins = UserTask.find_by(user_id:@user.id,id:params[:task_id])
+          ins = Task.find_by(calendar_id:params[:calendarId],id:params[:task_id])
           if ins.destroy
               render json: JSON.pretty_generate({
                                                 status:'SUCCESS',
@@ -77,6 +77,13 @@ class Api::V1::TaskController < ApplicationController
               
                                                   })
           end
+        else
+            render json: JSON.pretty_generate({
+                                                  status:'Error',
+                                                  api_version: 'v1',
+                                                  mes: 'セッション切れ'
+              
+                                                  })
         end
     end
 end

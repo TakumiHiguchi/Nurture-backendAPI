@@ -17,6 +17,7 @@ class Task < ApplicationRecord
             taskResult = dkArray.createDateKeysArray(taskResult, task.taskDate)
             ins = {
                 id:task.id,
+                calendarId:cal_id,
                 title:task.title,
                 content:task.content,
                 date:task.taskDate,
