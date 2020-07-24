@@ -46,6 +46,8 @@ class Api::V1::SettingController < ApplicationController
                     mes = "期間を更新しました。"
                 end
             else
+                result = false
+                mes = "カレンダーを所有していません"
             end
             
         else
