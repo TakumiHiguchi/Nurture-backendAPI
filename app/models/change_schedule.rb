@@ -40,7 +40,7 @@ class ChangeSchedule < ApplicationRecord
 
     #カレンダーIDから授業変更を取得して、配列に格納する関数
     def self.createDatekeyArrayOfChangeSchedule(cal_id)
-        changeSchedule = ChangeSchedule.joins(:calendar).select("change_schedules.* ,calendars.* ,change_schedules.position AS change_schedules_position, change_schedules.id AS change_schedules_id").where(calendar_id: cal_id)
+        changeSchedule = ChangeSchedule.joins(:calendar).select("change_schedules.* ,calendars.* ,calendars.id AS calendar_id, change_schedules.position AS change_schedules_position, change_schedules.id AS change_schedules_id").where(calendar_id: cal_id)
         result = []
         result1 = []
         changeSchedule.each do |t|
@@ -55,6 +55,7 @@ class ChangeSchedule < ApplicationRecord
 
             ins = {
                 id:t.change_schedules_id,
+                calendarId:t.calendar_id,
                 title:insSchedule.title,
                 CoNum:insSchedule.CoNum,
                 teacher:insSchedule.teacher,
@@ -67,11 +68,12 @@ class ChangeSchedule < ApplicationRecord
             result[t.afterDate.strftime("%Y").to_i][t.afterDate.strftime("%m").to_i][t.afterDate.strftime("%d").to_i].push(ins)
             ins = {
                 id:t.change_schedules_id,
+                calendarId:t.calendar_id,
                 title:insSchedule.title,
                 CoNum:insSchedule.CoNum,
                 teacher:insSchedule.teacher,
                 semester:insSchedule.semester,
-                before_position:t.position,
+                before_position:(insSchedule.position % 6).to_i,
                 after_position:t.change_schedules_position,
                 afterDate:t.afterDate,
                 grade:insSchedule.grade,

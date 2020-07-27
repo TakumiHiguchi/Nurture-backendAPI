@@ -21,14 +21,19 @@ class Api::V1::CalendarController < ApplicationController
                 #スケジュール
                 schedules = Schedule.loadSchedule(cal.id)
 
+                #作成者
+                authorData = User.joins(:user_details).select("users.*, user_details.*").find_by("users.id = ?", cal.author_id)
+
                 result.push(
                     id: cal.id,
+                    user_id:@user.id,
                     name: cal.name,
                     description: cal.description,
                     key: cal.key,
                     shareBool: cal.shareBool,
                     cloneBool: cal.cloneBool,
                     author_id: cal.author_id,
+                    author_name: authorData.name,
                     color: cal.color,
                     tasks: tasks,
                     exams: exams,

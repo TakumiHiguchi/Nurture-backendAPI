@@ -34,7 +34,8 @@ class Api::V1::ChangeScheduleController < ApplicationController
     def update
     end
     def destroy
-          ins = ChangeSchedule.find_by(user_id:@user.id,id:params[:change_schedule_id])
+        if @userSession && @calendarOwn
+          ins = ChangeSchedule.find_by(calendar_id:params[:calendarId], id:params[:change_schedule_id])
           if ins.destroy
               render json: JSON.pretty_generate({
                                                 status:'SUCCESS',
@@ -49,6 +50,6 @@ class Api::V1::ChangeScheduleController < ApplicationController
               
                                                   })
           end
-        
+        end
     end
 end
