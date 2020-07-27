@@ -1,79 +1,25 @@
 class Api::V1::ExamController < ApplicationController
     before_action :userSignedin?, only: [:index,:create,:update,:destroy] #セッションの確認
+    before_action :calendarOwn?, only: [:create, :update, :destroy] #カレンダーの所有者か確認
     
     def index
         if @userSession
-            #sessionが有効だったらユーザーの試験を返す
-            exam = Exam.where(user_id:@user.id).order(complete:"ASC")
-            result = {}
-            
-            exam.each do |t|
-                #年:月:日をkeyに持つhashを生成し、そこに試験内容をpushしていく
-                #年の作成
-                reIns = result[t.examDate.strftime("%Y").to_i]
-                if reIns.nil?
-                    result[t.examDate.strftime("%Y").to_i] ={}
-                    reIns = result[t.examDate.strftime("%Y").to_i]
-                end
-                #月の作成
-                reIns1 = reIns[t.examDate.strftime("%m").to_i]
-                if reIns1.nil?
-                    result[t.examDate.strftime("%Y").to_i][t.examDate.strftime("%m").to_i] = {}
-                    reIns1 = result[t.examDate.strftime("%Y").to_i][t.examDate.strftime("%m").to_i]
-                end
-                #日の作成
-                reIns2 = reIns1[t.examDate.strftime("%d").to_i]
-                if reIns2.nil?
-                    result[t.examDate.strftime("%Y").to_i][t.examDate.strftime("%m").to_i][t.examDate.strftime("%d").to_i] = []
-                    reIns2 = result[t.examDate.strftime("%Y").to_i][t.examDate.strftime("%m").to_i][t.examDate.strftime("%d").to_i]
-                end
-
-                
-                ins = {
-                    id:t.id,
-                    title:t.title,
-                    content:t.content,
-                    date:t.examDate,
-                    position:t.position,
-                    complete:t.complete,
-                    label:"試験"
-                }
-                reIns2.push(ins)
-                result[t.examDate.strftime("%Y").to_i][t.examDate.strftime("%m").to_i][t.examDate.strftime("%d").to_i] = reIns2
-            end
-            if result
-                mes = "試験を取得しました"
-            else
-                mes = "試験の取得に失敗しました。"
-            end
-        else
-            result = nil
-            mes = "セッションが無効です"
-        end
-        
-        if result
-            render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes: mes,
-                                              exams:result
-            })
-        else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes: mes
-            })
         end
     end
 
     def create
-        if @userSession
-            #sessionが有効だったら試験を作る
-            result,mes = Exam.check_and_create(@user.id, params[:title], params[:content], params[:examdate], params[:position])
+        if @userSession && @calendarOwn
+            #sessionが有効だったらタスクを作る
+            result,mes = Exam.check_and_create(params[:calendarId], params[:title], params[:content], params[:examdate], params[:position])
+            if result
+                mes = "タスクを作成しました"
+            else
+                mes = "タスクの作成に失敗しました。"
+            end
         else
             result = false
             mes = "セッションが無効です"
+            mes = "カレンダーの所有者ではありません" if !@calendarOwn
         end
         
         if result
@@ -92,10 +38,10 @@ class Api::V1::ExamController < ApplicationController
     end
 
     def update
-        if @userSession
+        if @userSession && @calendarOwn
             #sessionが有効だったらタスクを作る
-            ins = Exam.find_by(user_id:@user.id,id:params[:exam_id])
-            ins = ins.update(user_id:@user.id, title: params[:title], content: params[:content], examDate:params[:examdate], position:params[:position],complete:params[:complete])
+            ins = Exam.find_by(calendar_id:params[:calendarId], id:params[:exam_id])
+            ins = ins.update(calendar_id:params[:calendarId], title: params[:title], content: params[:content], examDate:params[:examdate], position:params[:position],complete:params[:complete])
             if ins
                 render json: JSON.pretty_generate({
                                                   status:'SUCCESS',
@@ -113,9 +59,9 @@ class Api::V1::ExamController < ApplicationController
         end
     end
     def destroy
-        if @userSession
+        if @userSession && @calendarOwn
         #sessionが有効だったらタスクを作る
-          ins = Exam.find_by(user_id:@user.id,id:params[:exam_id])
+          ins = Exam.find_by(calendar_id:params[:calendarId], id:params[:exam_id])
           if ins.destroy
               render json: JSON.pretty_generate({
                                                 status:'SUCCESS',

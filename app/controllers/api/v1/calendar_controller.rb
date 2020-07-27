@@ -3,6 +3,7 @@ class Api::V1::CalendarController < ApplicationController
     def index
         if @userSession
             result = []
+            #ユーザーのカレンダー取得
             calendar = User.joins(:calendars).select("users.*, calendars.*").where("users.id = ?", @user.id)
             calendar.each do |cal|
                 #booleanを加工する
@@ -17,6 +18,8 @@ class Api::V1::CalendarController < ApplicationController
                 cs0,cs1 = ChangeSchedule.createDatekeyArrayOfChangeSchedule(cal.id)
                 #学期の期間を取得して格納する
                 sp = SemesterPeriod.loadUserPeriod(cal.id)
+                #スケジュール
+                schedules = Schedule.loadSchedule(cal.id)
 
                 result.push(
                     id: cal.id,
@@ -31,7 +34,8 @@ class Api::V1::CalendarController < ApplicationController
                     exams: exams,
                     change_schedules_after:cs0,
                     change_schedules_before:cs1,
-                    semesterPeriod: sp
+                    semesterPeriod: sp,
+                    schedules: schedules
                 )
             end
         end

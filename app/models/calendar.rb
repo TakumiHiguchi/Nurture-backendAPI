@@ -13,4 +13,5 @@ class Calendar < ApplicationRecord
     has_many :exams
     has_many :change_schedules
     has_many :semester_periods
+
 end

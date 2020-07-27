@@ -1,7 +1,5 @@
 class ChangeSchedule < ApplicationRecord
     #バリデーション
-    validates :beforeDate,  presence: true
-    validates :afterDate,   presence: true
     validates :position,    presence: true
 
     #アソシエーション
@@ -9,14 +7,14 @@ class ChangeSchedule < ApplicationRecord
     belongs_to :calendar
     
     
-    def self.check_and_create(user_id, schedule_id, beforeDate, afterDate, position)
+    def self.check_and_create(cal_id, schedule_id, beforeDate, afterDate, position)
         #日付を加工する
         beforeDate.gsub!("/","-")
         afterDate.gsub!("/","-")
         
         #すでに移動済みかのチェック
-        check = ChangeSchedule.joins(:schedule).select("change_schedules.* ,schedules.*").where(user_id:user_id, schedule_id:schedule_id, beforeDate:beforeDate)
-        check1 = ChangeSchedule.where(user_id:user_id,afterDate:afterDate, position:position)
+        check = ChangeSchedule.where(calendar_id:cal_id, schedule_id:schedule_id, beforeDate:beforeDate)
+        check1 = ChangeSchedule.where(calendar_id:cal_id,afterDate:afterDate, position:position)
         
         if check.length > 0
             result = nil
@@ -27,7 +25,7 @@ class ChangeSchedule < ApplicationRecord
             mes = "移動先には授業変更が既に登録されています。"
             return result,mes
         else
-            result = self.create(user_id:user_id, schedule_id:schedule_id, beforeDate:beforeDate, afterDate:afterDate, position:position)
+            result = self.create!(calendar_id:cal_id, schedule_id:schedule_id, beforeDate:beforeDate, afterDate:afterDate, position:position)
             result = result.save
             if result
                 mes = "授業の移動を作成しました"
@@ -51,29 +49,33 @@ class ChangeSchedule < ApplicationRecord
             result = dkArray.createDateKeysArray(result, t.afterDate)
             dkArray1 = DateKeysArray.new
             result1 = dkArray1.createDateKeysArray(result1, t.beforeDate)
+
+            #スケジュールを取得
+            insSchedule = Schedule.find_by(id:t.schedule_id);
+
             ins = {
                 id:t.change_schedules_id,
-                title:t.title,
-                CoNum:t.CoNum,
-                teacher:t.teacher,
-                semester:t.semester,
+                title:insSchedule.title,
+                CoNum:insSchedule.CoNum,
+                teacher:insSchedule.teacher,
+                semester:insSchedule.semester,
                 after_position:t.change_schedules_position,
-                grade:t.grade,
-                status:t.status,
+                grade:insSchedule.grade,
+                status:insSchedule.status,
                 afterDate:t.afterDate
             }
             result[t.afterDate.strftime("%Y").to_i][t.afterDate.strftime("%m").to_i][t.afterDate.strftime("%d").to_i].push(ins)
             ins = {
                 id:t.change_schedules_id,
-                title:t.title,
-                CoNum:t.CoNum,
-                teacher:t.teacher,
-                semester:t.semester,
+                title:insSchedule.title,
+                CoNum:insSchedule.CoNum,
+                teacher:insSchedule.teacher,
+                semester:insSchedule.semester,
                 before_position:t.position,
                 after_position:t.change_schedules_position,
                 afterDate:t.afterDate,
-                grade:t.grade,
-                status:t.status,
+                grade:insSchedule.grade,
+                status:insSchedule.status,
                 beforeDate:t.beforeDate
             }
             result1[t.beforeDate.strftime("%Y").to_i][t.beforeDate.strftime("%m").to_i][t.beforeDate.strftime("%d").to_i].push(ins)
