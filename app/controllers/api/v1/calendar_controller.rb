@@ -128,7 +128,8 @@ class Api::V1::CalendarController < ApplicationController
     def destroy
         if @userSession && @calendarOwn
             ins = Calendar.find_by(id:params[:calendarId])
-            if ins.destroy
+            ens = UserCalendarRelation.find_by(calendar_id:params[:calendarId], user_id:@user.id)
+            if ins.destroy && ens.destroy
                 render json: JSON.pretty_generate({
                                                     status:'SUCCESS',
                                                     api_version: 'v1',

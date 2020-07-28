@@ -21,6 +21,7 @@ Rails.application.routes.draw do
             
             resources :calendar, only:[:index,:create,:update]
             delete 'calendar' => 'calendar#destroy'
+            get 'calendar_search' => 'calendar_share#search'
             
         end
     end
