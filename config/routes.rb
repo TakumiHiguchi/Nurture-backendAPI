@@ -9,9 +9,9 @@ Rails.application.routes.draw do
             patch 'task' => 'task#update'
             delete 'exam' => 'exam#destroy'
             patch 'exam' => 'exam#update'
-            resources :exam ,only:[:index,:create,:update]
+            resources :exam ,only:[:index,:create]
             delete 'change_schedule' => 'change_schedule#destroy'
-            resources :change_schedule ,only:[:index,:create,:update]
+            resources :change_schedule ,only:[:index,:create]
             resources :news, only:[:index]
             get 'userLogin' =>  'login#login'
             post 'setUserSchedule' => 'user#setUserSchedule'
@@ -20,6 +20,7 @@ Rails.application.routes.draw do
             post 'setSemesterDate' => 'setting#setSemesterDate'
             
             resources :calendar, only:[:index,:create,:update]
+            delete 'calendar' => 'calendar#destroy'
             
         end
     end

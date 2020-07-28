@@ -7,11 +7,11 @@ class Calendar < ApplicationRecord
     #アソシエーション
     has_many :user_calendar_relations
     has_many :users, through: :user_calendar_relations
-    has_many :calendar_schedule_relations
+    has_many :calendar_schedule_relations, dependent: :destroy
     has_many :schedules, through: :calendar_schedule_relations
-    has_many :tasks
-    has_many :exams
-    has_many :change_schedules
-    has_many :semester_periods
+    has_many :tasks, dependent: :destroy
+    has_many :exams, dependent: :destroy
+    has_many :change_schedules, dependent: :destroy
+    has_many :semester_periods, dependent: :destroy
 
 end

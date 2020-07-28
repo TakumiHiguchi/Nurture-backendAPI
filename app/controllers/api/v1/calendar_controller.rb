@@ -1,5 +1,6 @@
 class Api::V1::CalendarController < ApplicationController
-    before_action :userSignedin?, only: [:index] #セッションの確認
+    before_action :userSignedin?, only: [:index,:update,:destroy] #セッションの確認
+    before_action :calendarOwn?, only: [:update,:destroy] #カレンダーの所有者か確認
     def index
         if @userSession
             result = []
@@ -57,6 +58,63 @@ class Api::V1::CalendarController < ApplicationController
                                               api_version: 'v1',
                                               mes: mes
             })
+        end
+    end
+    def update
+        if @userSession && @calendarOwn
+            calendar = Calendar.find_by(id:params[:calendarId])
+            calBoolean = calendar.update(
+                name: params[:name],
+                description: params[:description],
+                color: params[:color],
+                shareBool: params[:shareBool],
+                cloneBool: params[:cloneBool],
+            )
+        else
+            calBoolean = false
+            mes = "アクセス権限がありません。"
+        end
+        if calBoolean
+            render json: JSON.pretty_generate({
+                                              status:'SUCCESS',
+                                              api_version: 'v1',
+                                              mes: "カレンダーを変更しました。"
+            })
+        else
+            if name == "" 
+                mes = "名前は最低1文字以上でなくてはなりません"
+            end
+            render json: JSON.pretty_generate({
+                                              status:'ERROR',
+                                              api_version: 'v1',
+                                              mes: mes
+            })
+        end
+    end
+    def destroy
+        if @userSession && @calendarOwn
+            ins = Calendar.find_by(id:params[:calendarId])
+            if ins.destroy
+                render json: JSON.pretty_generate({
+                                                    status:'SUCCESS',
+                                                    api_version: 'v1',
+                                                    mes:"カレンダーを削除しました。"
+                                                    })
+            else
+                render json: JSON.pretty_generate({
+                                                    status:'Error',
+                                                    api_version: 'v1',
+                                                    mes: 'カレンダーの削除に失敗しました。'
+                
+                                                    })
+            end
+        else
+            render json: JSON.pretty_generate({
+                                                  status:'Error',
+                                                  api_version: 'v1',
+                                                  mes: 'セッション切れ'
+              
+                                                  })
         end
     end
 end
