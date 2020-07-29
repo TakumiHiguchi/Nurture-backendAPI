@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_23_033657) do
+ActiveRecord::Schema.define(version: 2020_07_29_075525) do
 
   create_table "calendar_schedule_relations", force: :cascade do |t|
     t.integer "schedule_id"
@@ -28,6 +28,15 @@ ActiveRecord::Schema.define(version: 2020_07_23_033657) do
     t.boolean "cloneBool", default: false, null: false
     t.string "key"
     t.integer "author_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "canceled_lectures", force: :cascade do |t|
+    t.integer "calendar_id"
+    t.date "clDate"
+    t.integer "grade"
+    t.integer "position"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

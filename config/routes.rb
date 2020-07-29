@@ -26,7 +26,7 @@ Rails.application.routes.draw do
             post 'calendar_follow' => 'calendar_share#follow'
 
             resources :user, only:[:update]
-            
+            resources :canceled_lecture, only:[:index,:create,:update]
         end
     end
 end

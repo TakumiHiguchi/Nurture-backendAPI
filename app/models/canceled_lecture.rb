@@ -1,0 +1,2 @@
+class CanceledLecture < ApplicationRecord
+end
