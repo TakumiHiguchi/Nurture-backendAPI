@@ -126,28 +126,43 @@ class Api::V1::CalendarController < ApplicationController
         end
     end
     def destroy
-        if @userSession && @calendarOwn
-            ins = Calendar.find_by(id:params[:calendarId])
-            ens = UserCalendarRelation.find_by(calendar_id:params[:calendarId], user_id:@user.id)
-            if ins.destroy && ens.destroy
+        check = UserCalendarRelation.where(user_id:@user.id).count
+        if @userSession && check > 1
+            if !@calendarOwn
+                ens = UserCalendarRelation.find_by(calendar_id:params[:calendarId], user_id:@user.id)
+                ens.destroy
                 render json: JSON.pretty_generate({
                                                     status:'SUCCESS',
                                                     api_version: 'v1',
                                                     mes:"カレンダーを削除しました。"
                                                     })
             else
-                render json: JSON.pretty_generate({
-                                                    status:'Error',
-                                                    api_version: 'v1',
-                                                    mes: 'カレンダーの削除に失敗しました。'
-                
-                                                    })
+                ins = Calendar.find_by(id:params[:calendarId])
+                ens = UserCalendarRelation.find_by(calendar_id:params[:calendarId], user_id:@user.id)
+                if ins.destroy && ens.destroy
+                    render json: JSON.pretty_generate({
+                                                        status:'SUCCESS',
+                                                        api_version: 'v1',
+                                                        mes:"カレンダーを削除しました。"
+                                                        })
+                else
+                    render json: JSON.pretty_generate({
+                                                        status:'Error',
+                                                        api_version: 'v1',
+                                                        mes: 'カレンダーの削除に失敗しました。'
+                    
+                                                        })
+                end
             end
         else
+            mes = 'セッション切れです'
+            if check <= 1
+                mes = "最低でも一個のカレンダーがなければなりません。"
+            end
             render json: JSON.pretty_generate({
                                                   status:'Error',
                                                   api_version: 'v1',
-                                                  mes: 'セッション切れ'
+                                                  mes: mes
               
                                                   })
         end

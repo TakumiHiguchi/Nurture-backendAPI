@@ -29,4 +29,20 @@ class Task < ApplicationRecord
         end
         return taskResult
     end
+    def self.clone(cal_id, newcal_id)
+        tasks = Task.where(calendar_id: cal_id)
+        bl = true
+        tasks.each do |task|
+            if bl
+                bl = Task.create(
+                    calendar_id:newcal_id, 
+                    title: task.title, 
+                    content: task.content, 
+                    taskDate:task.taskDate, 
+                    position:task.position
+                )
+            end
+        end
+        return bl
+    end
 end

@@ -34,9 +34,10 @@ class Api::V1::SettingController < ApplicationController
         #sessionの確認
         user = User.find_by(key: params[:key],session: params[:session])
         userSession = user.maxAge.to_i > Time.now.to_i if user
+        calendar = Calendar.find_by(id:params[:calendarId])
         
         if userSession && Time.parse(params[:date1]) < Time.parse(params[:date2]) && Time.parse(params[:date2]) < Time.parse(params[:date3]) && Time.parse(params[:date3]) < Time.parse(params[:date4])
-            if calendarOwn(user.id ,params[:calendarId])
+            if calendarOwn(user.id ,params[:calendarId]) && user.id == calendar.author_id
                 sP = SemesterPeriod.find_by(calendar_id: params[:calendarId], grade:params[:grade])
                 if !sP
                     result = SemesterPeriod.create!(calendar_id: params[:calendarId], grade:params[:grade], fh_semester_f:params[:date1], fh_semester_s:params[:date2], late_semester_f:params[:date3], late_semester_s:params[:date4])

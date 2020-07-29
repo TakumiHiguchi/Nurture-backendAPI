@@ -21,4 +21,18 @@ class CalendarScheduleRelation < ApplicationRecord
             return nil,false,"スケジュールがありませんでした。"
         end
     end
+    def self.clone(cal_id, newcal_id)
+        csrs = CalendarScheduleRelation.where(calendar_id: cal_id)
+        bl = true
+        csrs.each do |csr|
+            if bl
+                bl = CalendarScheduleRelation.create(
+                        schedule_id: csr.schedule_id, 
+                        calendar_id: newcal_id, 
+                        reges_grade: csr.reges_grade
+                    )
+            end
+        end
+        return bl
+    end
 end
