@@ -24,6 +24,8 @@ Rails.application.routes.draw do
             get 'calendar_search' => 'calendar_share#search'
             post 'calendar_clone' => 'calendar_share#clone'
             post 'calendar_follow' => 'calendar_share#follow'
+
+            resources :user, only:[:update]
             
         end
     end

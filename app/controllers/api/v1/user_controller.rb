@@ -1,7 +1,7 @@
 class Api::V1::UserController < ApplicationController
     require 'digest/sha2' #ハッシュ
     require 'date'
-    before_action :userSignedin?, only: [:setUserSchedule] #セッションの確認
+    before_action :userSignedin?, only: [:setUserSchedule, :update] #セッションの確認
     before_action :calendarOwn?, only: [:setUserSchedule] #カレンダーの所有者か確認
     
     
@@ -66,6 +66,25 @@ class Api::V1::UserController < ApplicationController
                                               api_version: 'v1',
                                               mes: mes
             })
+        end
+    end
+    def update
+        if @userSession
+            userDetail = UserDetail.find_by(user_id:@user.id)
+            result = userDetail.update(name:params[:name])
+            if result
+                render json: JSON.pretty_generate({
+                                                  status:'SUCCESS',
+                                                  api_version: 'v1',
+                                                  mes: "ユーザーを更新しました"
+                })
+            else
+                render json: JSON.pretty_generate({
+                                                  status:'ERROR',
+                                                  api_version: 'v1',
+                                                  mes: "ユーザーの更新に失敗しました"
+                })
+            end
         end
     end
 end

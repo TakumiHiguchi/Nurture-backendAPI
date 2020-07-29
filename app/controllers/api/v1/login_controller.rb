@@ -15,7 +15,7 @@ class Api::V1::LoginController < ApplicationController
             o = [('a'..'z'), ('A'..'Z'), ('0'..'9')].map { |i| i.to_a }.flatten
             key = (0...20).map { o[rand(o.length)] }.join
             
-            ex ? mes="お帰りなさい#{userName}さん" : mes="こんにちは。#{userName}さん"
+            
             if !ex
               #新規ユーザー
               #ユーザーの情報を取得
@@ -36,7 +36,7 @@ class Api::V1::LoginController < ApplicationController
         
         
         u = User.joins(:user_details).select("users.*, user_details.*, users.id AS user_id").find_by(key: userKey,session: session)
-
+        ex ? mes="お帰りなさい#{u.name}さん" : mes="こんにちは。#{u.name}さん"
         #ユーザが登録した学期の期間を整形して配列で返す処理
         #semesterDate = SemesterPeriod.loadUserPeriod(u.id)
         
@@ -45,7 +45,7 @@ class Api::V1::LoginController < ApplicationController
                                           api_version: 'v1',
                                           mes:mes,
                                           userKey: userKey,
-                                          userName: userName,
+                                          userName: u.name,
                                           pictureURL: pictureURL,
                                           session: session,
                                           maxAge: sessionAge,
