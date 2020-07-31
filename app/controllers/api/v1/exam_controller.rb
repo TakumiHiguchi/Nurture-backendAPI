@@ -9,12 +9,12 @@ class Api::V1::ExamController < ApplicationController
 
     def create
         if @userSession && @calendarOwn
-            #sessionが有効だったらタスクを作る
+            #sessionが有効だったら試験を作る
             result,mes = Exam.check_and_create(params[:calendarId], params[:title], params[:content], params[:examdate], params[:position])
             if result
-                mes = "タスクを作成しました"
+                mes = "試験を作成しました"
             else
-                mes = "タスクの作成に失敗しました。"
+                mes = "試験の作成に失敗しました。"
             end
         else
             result = false
@@ -39,7 +39,7 @@ class Api::V1::ExamController < ApplicationController
 
     def update
         if @userSession && @calendarOwn
-            #sessionが有効だったらタスクを作る
+            #sessionが有効だったら試験を作る
             ins = Exam.find_by(calendar_id:params[:calendarId], id:params[:exam_id])
             ins = ins.update(calendar_id:params[:calendarId], title: params[:title], content: params[:content], examDate:params[:examdate], position:params[:position],complete:params[:complete])
             if ins
