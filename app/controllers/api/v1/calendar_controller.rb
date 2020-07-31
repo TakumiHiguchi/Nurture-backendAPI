@@ -22,6 +22,9 @@ class Api::V1::CalendarController < ApplicationController
                 #スケジュール
                 schedules = Schedule.loadSchedule(cal.id)
 
+                #休講
+                cL = CanceledLecture.loadCL(cal.id)
+
                 #作成者
                 authorData = User.joins(:user_details).select("users.*, user_details.*").find_by("users.id = ?", cal.author_id)
 
@@ -41,7 +44,8 @@ class Api::V1::CalendarController < ApplicationController
                     change_schedules_after:cs0,
                     change_schedules_before:cs1,
                     semesterPeriod: sp,
-                    schedules: schedules
+                    schedules: schedules,
+                    canceled_lecture: cL
                 )
             end
         end
