@@ -14,4 +14,19 @@ class Calendar < ApplicationRecord
     has_many :change_schedules, dependent: :destroy
     has_many :semester_periods, dependent: :destroy
 
+    def self.search(query)
+        return self.all unless query
+
+        keywords = query.split(/[[:blank:]]+/)
+        articles = self
+
+        keywords.each do |keyword|
+            articles = articles.where("UPPER(name) LIKE ?", "%#{keyword.upcase}%").or(self.where(["UPPER(description) LIKE ?", "%#{query.upcase}%"]))
+            .or(self.where(["UPPER(key) LIKE ?", "%#{query.upcase}%"])) #分割されたキーワードでの検索
+        end
+
+        return articles
+        
+    end
+
 end

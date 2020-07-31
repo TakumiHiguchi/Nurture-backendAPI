@@ -3,8 +3,9 @@ class Api::V1::CalendarShareController < ApplicationController
     def search
         if @userSession
             result = []
+            
             if params[:type] == "search" then
-                calendar = Calendar.where(shareBool:true).where.not(author_id: @user.id)
+                calendar = Calendar.search(params[:q]).where(shareBool:true).where.not(author_id: @user.id)
             else
                 calendar = Calendar.where(shareBool:true).where.not(author_id: @user.id)
             end
