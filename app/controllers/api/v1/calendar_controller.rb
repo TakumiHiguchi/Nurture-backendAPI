@@ -7,9 +7,6 @@ class Api::V1::CalendarController < ApplicationController
             #ユーザーのカレンダー取得
             calendar = User.joins(:calendars).select("users.*, calendars.*").where("users.id = ?", @user.id)
             calendar.each do |cal|
-                #booleanを加工する
-                cal.shareBool == 0 ? cal.shareBool = false : cal.shareBool = true
-                cal.cloneBool == 0 ? cal.cloneBool = false : cal.cloneBool = true
 
                 #Taskを取得して格納する
                 tasks = Task.createDatekeyArrayOfTask(cal.id)
