@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_29_075525) do
+ActiveRecord::Schema.define(version: 2020_08_04_181303) do
 
   create_table "calendar_schedule_relations", force: :cascade do |t|
     t.integer "schedule_id"
@@ -102,6 +102,14 @@ ActiveRecord::Schema.define(version: 2020_07_29_075525) do
     t.date "taskDate"
     t.integer "position"
     t.boolean "complete", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "transfer_schedules", force: :cascade do |t|
+    t.integer "calendar_id"
+    t.date "beforeDate"
+    t.date "afterDate"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

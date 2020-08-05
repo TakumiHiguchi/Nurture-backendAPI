@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
             resources :user, only:[:update]
             resources :canceled_lecture, only:[:index,:create,:update]
+            resources :transfer_schedule, only:[:create,:destroy]
         end
     end
 end

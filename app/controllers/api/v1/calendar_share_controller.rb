@@ -75,6 +75,7 @@ class Api::V1::CalendarShareController < ApplicationController
                     CalendarScheduleRelation.clone(ins.id, result.id)
                     ChangeSchedule.clone(ins.id, result.id)
                     SemesterPeriod.clone(ins.id, result.id)
+                    TransferSchedule.clone(ins.id, result.id)
                 end
             else
                 result = false
