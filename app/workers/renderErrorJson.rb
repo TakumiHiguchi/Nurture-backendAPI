@@ -1,4 +1,4 @@
-class RenderJson
+class RenderErrorJson
   def createError(props)
     case props[:code]
       when 'AE_0001'

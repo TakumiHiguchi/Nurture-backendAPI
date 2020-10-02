@@ -2,7 +2,7 @@ class Api::V1::CalendarController < ApplicationController
   before_action :userSignedin?, :only => [:index,:create,:update,:destroy] #セッションの確認
   before_action :calendarOwn?, :only => [:update,:destroy] #カレンダーの所有者か確認
   def index
-    errorJson = RenderJson.new()
+    errorJson = RenderErrorJson.new()
     if @userSession
       result = []
       #ユーザーのカレンダー取得
