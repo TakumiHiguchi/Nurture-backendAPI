@@ -22,7 +22,7 @@ class GoogleConfiguration
             publicKey = rsaPubkey(token_header["kid"])
             
             if !publicKey.nil?
-                decoded_token = JWT.decode token, publicKey, true, { verify_iat: true, iss: iss, verify_iss: true, aud: aud, verify_aud: true, algorithm: 'RS256' }
+                decoded_token = JWT.decode token, publicKey, true, { :verify_iat => true, :iss => iss, :verify_iss => true, :aud => aud, :verify_aud => true, :algorithm => 'RS256' }
             end
             return decoded_token[0]
         else

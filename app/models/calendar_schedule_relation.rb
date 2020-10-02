@@ -1,7 +1,7 @@
 class CalendarScheduleRelation < ApplicationRecord
     #バリデーション
-    validates :schedule_id, presence: true
-    validates :calendar_id, presence: true
+    validates :schedule_id, :presence => true
+    validates :calendar_id, :presence => true
 
     #アソシエーション
     belongs_to :calendar
@@ -14,7 +14,7 @@ class CalendarScheduleRelation < ApplicationRecord
             if reSc.length > 0
                 return nil,false,"既に登録されています。"
             else
-                return self.create(schedule_id: sc.id, calendar_id: calendar_id, reges_grade: user_grade),true,"スケジュールの登録が完了しました。"
+                return self.create(:schedule_id => sc.id, :calendar_id => calendar_id, :reges_grade => user_grade),true,"スケジュールの登録が完了しました。"
             end
         else
             #スケジュールがなかった場合の処理
@@ -22,14 +22,14 @@ class CalendarScheduleRelation < ApplicationRecord
         end
     end
     def self.clone(cal_id, newcal_id)
-        csrs = CalendarScheduleRelation.where(calendar_id: cal_id)
+        csrs = CalendarScheduleRelation.where(:calendar_id => cal_id)
         bl = true
         csrs.each do |csr|
             if bl
                 bl = CalendarScheduleRelation.create(
-                        schedule_id: csr.schedule_id, 
-                        calendar_id: newcal_id, 
-                        reges_grade: csr.reges_grade
+                        :schedule_id => csr.schedule_id, 
+                        :calendar_id => newcal_id, 
+                        :reges_grade => csr.reges_grade
                     )
             end
         end

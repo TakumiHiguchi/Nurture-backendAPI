@@ -6,7 +6,7 @@ class CreateExams < ActiveRecord::Migration[6.0]
       t.text :content
       t.date :examDate
       t.integer :position
-      t.boolean :complete, default: false
+      t.boolean :complete, :default => false
 
       t.timestamps
     end

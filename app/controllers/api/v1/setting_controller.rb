@@ -2,11 +2,11 @@ class Api::V1::SettingController < ApplicationController
     
     def setGrade
         #sessionの確認
-        user = User.find_by(key: params[:key],session: params[:session])
+        user = User.find_by(:key => params[:key],:session => params[:session])
         userSession = user.maxAge.to_i > Time.now.to_i if user
         
         if userSession && !params[:grade].nil?
-            userDetail = UserDetail.find_by(user_id:user.id)
+            userDetail = UserDetail.find_by(:user_id => user.id)
             userDetail.grade = params[:grade]
             result = userDetail.save
             mes = "学年を更新しました。"
@@ -16,34 +16,34 @@ class Api::V1::SettingController < ApplicationController
         end
         
         if result
-            render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes: mes
+            render :json => JSON.pretty_generate({
+                                              :status => 'SUCCESS',
+                                              :api_version => 'v1',
+                                              :mes => mes
             })
         else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes: mes
+            render :json => JSON.pretty_generate({
+                                              :status => 'ERROR',
+                                              :api_version => 'v1',
+                                              :mes => mes
             })
         end
     end
     
     def setSemesterDate
         #sessionの確認
-        user = User.find_by(key: params[:key],session: params[:session])
+        user = User.find_by(:key => params[:key],:session => params[:session])
         userSession = user.maxAge.to_i > Time.now.to_i if user
-        calendar = Calendar.find_by(id:params[:calendarId])
+        calendar = Calendar.find_by(:id => params[:calendarId])
         
         if userSession && Time.parse(params[:date1]) < Time.parse(params[:date2]) && Time.parse(params[:date2]) < Time.parse(params[:date3]) && Time.parse(params[:date3]) < Time.parse(params[:date4])
             if calendarOwn(user.id ,params[:calendarId]) && user.id == calendar.author_id
-                sP = SemesterPeriod.find_by(calendar_id: params[:calendarId], grade:params[:grade])
+                sP = SemesterPeriod.find_by(:calendar_id => params[:calendarId], :grade => params[:grade])
                 if !sP
-                    result = SemesterPeriod.create!(calendar_id: params[:calendarId], grade:params[:grade], fh_semester_f:params[:date1], fh_semester_s:params[:date2], late_semester_f:params[:date3], late_semester_s:params[:date4])
+                    result = SemesterPeriod.create!(:calendar_id => params[:calendarId], :grade => params[:grade], :fh_semester_f => params[:date1], :fh_semester_s => params[:date2], :late_semester_f => params[:date3], :late_semester_s => params[:date4])
                     mes = "期間を新しく作りました。"
                 else
-                    result = sP.update(calendar_id: params[:calendarId], grade:params[:grade], fh_semester_f:params[:date1], fh_semester_s:params[:date2], late_semester_f:params[:date3], late_semester_s:params[:date4])
+                    result = sP.update(:calendar_id => params[:calendarId], :grade => params[:grade], :fh_semester_f => params[:date1], :fh_semester_s => params[:date2], :late_semester_f => params[:date3], :late_semester_s => params[:date4])
                     mes = "期間を更新しました。"
                 end
             else
@@ -57,16 +57,16 @@ class Api::V1::SettingController < ApplicationController
         end
         
         if result
-            render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes: mes
+            render :json => JSON.pretty_generate({
+                                              :status => 'SUCCESS',
+                                              :api_version => 'v1',
+                                              :mes => mes
             })
         else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes: mes
+            render :json => JSON.pretty_generate({
+                                              :status => 'ERROR',
+                                              :api_version => 'v1',
+                                              :mes => mes
             })
         end
     end

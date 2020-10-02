@@ -1,6 +1,6 @@
 class ChangeSchedule < ApplicationRecord
     #バリデーション
-    validates :position,    presence: true
+    validates :position,    :presence => true
 
     #アソシエーション
     belongs_to :schedule
@@ -13,8 +13,8 @@ class ChangeSchedule < ApplicationRecord
         afterDate.gsub!("/","-")
         
         #すでに移動済みかのチェック
-        check = ChangeSchedule.where(calendar_id:cal_id, schedule_id:schedule_id, beforeDate:beforeDate)
-        check1 = ChangeSchedule.where(calendar_id:cal_id,afterDate:afterDate, position:position)
+        check = ChangeSchedule.where(:calendar_id => cal_id, :schedule_id => schedule_id, :beforeDate => beforeDate)
+        check1 = ChangeSchedule.where(:calendar_id => cal_id,:afterDate => afterDate, :position => position)
         
         if check.length > 0
             result = nil
@@ -25,7 +25,7 @@ class ChangeSchedule < ApplicationRecord
             mes = "移動先には授業変更が既に登録されています。"
             return result,mes
         else
-            result = self.create(calendar_id:cal_id, schedule_id:schedule_id, beforeDate:beforeDate, afterDate:afterDate, position:position)
+            result = self.create(:calendar_id => cal_id, :schedule_id => schedule_id, :beforeDate => beforeDate, :afterDate => afterDate, :position => position)
             result = result.save
             if result
                 mes = "授業の移動を作成しました"
@@ -40,7 +40,7 @@ class ChangeSchedule < ApplicationRecord
 
     #カレンダーIDから授業変更を取得して、配列に格納する関数
     def self.createDatekeyArrayOfChangeSchedule(cal_id)
-        changeSchedule = ChangeSchedule.joins(:calendar).select("change_schedules.* ,calendars.* ,calendars.id AS calendar_id, change_schedules.position AS change_schedules_position, change_schedules.id AS change_schedules_id").where(calendar_id: cal_id)
+        changeSchedule = ChangeSchedule.joins(:calendar).select("change_schedules.* ,calendars.* ,calendars.id AS calendar_id, change_schedules.position AS change_schedules_position, change_schedules.id AS change_schedules_id").where(:calendar_id => cal_id)
         result = []
         result1 = []
         changeSchedule.each do |t|
@@ -51,50 +51,50 @@ class ChangeSchedule < ApplicationRecord
             result1 = dkArray1.createDateKeysArray(result1, t.beforeDate)
 
             #スケジュールを取得
-            insSchedule = Schedule.find_by(id:t.schedule_id);
+            insSchedule = Schedule.find_by(:id => t.schedule_id);
 
             ins = {
-                id:t.change_schedules_id,
-                calendarId:t.calendar_id,
-                title:insSchedule.title,
-                CoNum:insSchedule.CoNum,
-                teacher:insSchedule.teacher,
-                semester:insSchedule.semester,
-                after_position:t.change_schedules_position,
-                grade:insSchedule.grade,
-                status:insSchedule.status,
-                afterDate:t.afterDate
+                :id => t.change_schedules_id,
+                :calendarId => t.calendar_id,
+                :title => insSchedule.title,
+                :CoNum => insSchedule.CoNum,
+                :teacher => insSchedule.teacher,
+                :semester => insSchedule.semester,
+                :after_position => t.change_schedules_position,
+                :grade => insSchedule.grade,
+                :status => insSchedule.status,
+                :afterDate => t.afterDate
             }
             result[t.afterDate.strftime("%Y").to_i][t.afterDate.strftime("%m").to_i][t.afterDate.strftime("%d").to_i].push(ins)
             ins = {
-                id:t.change_schedules_id,
-                calendarId:t.calendar_id,
-                title:insSchedule.title,
-                CoNum:insSchedule.CoNum,
-                teacher:insSchedule.teacher,
-                semester:insSchedule.semester,
-                before_position:(insSchedule.position % 6).to_i,
-                after_position:t.change_schedules_position,
-                afterDate:t.afterDate,
-                grade:insSchedule.grade,
-                status:insSchedule.status,
-                beforeDate:t.beforeDate
+                :id => t.change_schedules_id,
+                :calendarId => t.calendar_id,
+                :title => insSchedule.title,
+                :CoNum => insSchedule.CoNum,
+                :teacher => insSchedule.teacher,
+                :semester => insSchedule.semester,
+                :before_position => (insSchedule.position % 6).to_i,
+                :after_position => t.change_schedules_position,
+                :afterDate => t.afterDate,
+                :grade => insSchedule.grade,
+                :status => insSchedule.status,
+                :beforeDate => t.beforeDate
             }
             result1[t.beforeDate.strftime("%Y").to_i][t.beforeDate.strftime("%m").to_i][t.beforeDate.strftime("%d").to_i].push(ins)
         end
         return result,result1
     end
     def self.clone(cal_id, newcal_id)
-        css = ChangeSchedule.where(calendar_id: cal_id)
+        css = ChangeSchedule.where(:calendar_id => cal_id)
         bl = true
         css.each do |cs|
             if bl
                 bl = ChangeSchedule.create(
-                    calendar_id:newcal_id, 
-                    schedule_id:cs.schedule_id, 
-                    beforeDate:cs.beforeDate, 
-                    afterDate:cs.afterDate, 
-                    position:cs.position
+                    :calendar_id => newcal_id, 
+                    :schedule_id => cs.schedule_id, 
+                    :beforeDate => cs.beforeDate, 
+                    :afterDate => cs.afterDate, 
+                    :position => cs.position
                 )
             end
         end

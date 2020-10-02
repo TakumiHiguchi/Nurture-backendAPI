@@ -36,7 +36,7 @@ namespace :scheduler do
                 lpdate = date[i].text.gsub("月", "/").gsub("年", "/").gsub("日", "")
                 title = titles[i].text
                 baseTitle = pageTitle.text.gsub(" ", "")
-                News.create(title: title, date: lpdate, link: link, base_title:baseTitle, base_link: url)
+                News.create(:title => title, :date => lpdate, :link => link, :base_title => baseTitle, :base_link => url)
             end
         end
     end
