@@ -1,12 +1,13 @@
 class Api::V1::CalendarController < ApplicationController
-    before_action :userSignedin?, :only => [:index,:create,:update,:destroy] #セッションの確認
-    before_action :calendarOwn?, :only => [:update,:destroy] #カレンダーの所有者か確認
-    def index
-        if @userSession
-            result = []
-            #ユーザーのカレンダー取得
-            calendar = User.joins(:calendars).select("users.*, calendars.*").where("users.id = ?", @user.id)
-            calendar.each do |cal|
+  before_action :userSignedin?, :only => [:index,:create,:update,:destroy] #セッションの確認
+  before_action :calendarOwn?, :only => [:update,:destroy] #カレンダーの所有者か確認
+  def index
+    errorJson = RenderJson.new()
+    if @userSession
+      result = []
+      #ユーザーのカレンダー取得
+      calendar = User.joins(:calendars).select("users.*, calendars.*").where("users.id = ?", @user.id)
+      calendar.each do |cal|
 
                 #Taskを取得して格納する
                 tasks = Task.createDatekeyArrayOfTask(cal.id)
@@ -49,7 +50,7 @@ class Api::V1::CalendarController < ApplicationController
                 )
             end
         end
-
+        
         if result
             render :json => JSON.pretty_generate({
                                               :status => 'SUCCESS',
@@ -57,11 +58,7 @@ class Api::V1::CalendarController < ApplicationController
                                               :calendars => result
             })
         else
-            render :json => JSON.pretty_generate({
-                                              :status => 'ERROR',
-                                              :api_version => 'v1',
-                                              :mes => mes
-            })
+          render json: errorJson.createError(code:'AE_0001',api_version:'v1')
         end
     end
     def create
