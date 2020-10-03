@@ -15,6 +15,19 @@ class Calendar < ApplicationRecord
   has_many :semester_periods, :dependent => :destroy
   has_many :transfer_schedules, :dependent => :destroy
 
+  #scope
+  scope :include_all_tables, -> {
+    includes(
+      :tasks,
+      :exams,
+      :semester_periods,
+      :change_schedules,
+      :calendar_schedule_relations,
+      :schedules,
+      :transfer_schedules
+    )
+  }
+
   def self.search(query)
     return self.all unless query
     

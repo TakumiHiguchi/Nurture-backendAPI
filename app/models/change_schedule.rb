@@ -42,32 +42,36 @@ class ChangeSchedule < ApplicationRecord
 		change_schedules_after = dkArray.createDateKeysArray(change_schedules_after, self.afterDate)
 		change_schedules_before = dkArray.createDateKeysArray(change_schedules_before, self.beforeDate)
 
-		insSchedule = Schedule.find_by(:id => self.schedule_id);
+		#ここで複数回SQLが発行されている
+		#こんな感じの→ SELECT "schedules".* FROM "schedules" WHERE "schedules"."id" = ? LIMIT ?  [["id", 1], ["LIMIT", 1]]
+		#おそらく設計が間違っている（change_schedluesでincludeしてもcalendarからchange_schedluesをincludeできない）
+		schedule = Schedule.find(self.schedule_id)
+
 		ins = {
 			:id => self.id,
 			:calendarId => calendar_id,
-			:title => insSchedule.title,
-			:CoNum => insSchedule.CoNum,
-			:teacher => insSchedule.teacher,
-			:semester => insSchedule.semester,
+			:title => schedule.title,
+			:CoNum => schedule.CoNum,
+			:teacher => schedule.teacher,
+			:semester => schedule.semester,
 			:after_position => self.position,
-			:grade => insSchedule.grade,
-			:status => insSchedule.status,
+			:grade => schedule.grade,
+			:status => schedule.status,
 			:afterDate => self.afterDate
 		}
 		change_schedules_after[self.afterDate.strftime("%Y").to_i][self.afterDate.strftime("%m").to_i][self.afterDate.strftime("%d").to_i].push(ins)
 		ins = {
 			:id => self.id,
 			:calendarId => calendar_id,
-			:title => insSchedule.title,
-			:CoNum => insSchedule.CoNum,
-			:teacher => insSchedule.teacher,
-			:semester => insSchedule.semester,
-			:before_position => (insSchedule.position % 6).to_i,
+			:title => schedule.title,
+			:CoNum => schedule.CoNum,
+			:teacher => schedule.teacher,
+			:semester => schedule.semester,
+			:before_position => (schedule.position % 6).to_i,
 			:after_position => self.position,
 			:afterDate => self.afterDate,
-			:grade => insSchedule.grade,
-			:status => insSchedule.status,
+			:grade => schedule.grade,
+			:status => schedule.status,
 			:beforeDate => self.beforeDate
 		}
 		change_schedules_before[self.beforeDate.strftime("%Y").to_i][self.beforeDate.strftime("%m").to_i][self.beforeDate.strftime("%d").to_i].push(ins)
