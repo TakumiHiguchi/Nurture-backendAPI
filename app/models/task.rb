@@ -8,7 +8,7 @@ class Task < ApplicationRecord
     #アソシエーション
     belongs_to :calendar
 
-    #カレンダーIDからTaskを取得して、配列に格納する関数
+    #カレンダーIDからTaskを取得して、配列に格納する
     def self.createDatekeyArrayOfTask(cal_id)
         taskResult = []
         tasks = self.where(:calendar_id => cal_id)
