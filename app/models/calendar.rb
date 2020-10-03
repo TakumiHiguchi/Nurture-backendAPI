@@ -33,7 +33,7 @@ class Calendar < ApplicationRecord
     self.tasks.each do |task|
       tasks = task.createDatekeyArrayOfTask(tasks,self.id)
     end
-    
+
     exams = []
     self.exams.each do |exam|
       exams = exam.createDatekeyArrayOfTask(exams,self.id)
@@ -41,8 +41,13 @@ class Calendar < ApplicationRecord
 
     change_schedules_before, change_schedules_after = self.change_schedules.createDatekeyArrayOfChangeSchedule(self.id)
 
-    #学期の期間を取得して格納する
-    sp = SemesterPeriod.loadUserPeriod(self.id)
+    #学期の期間
+    sp = Array.new(10,{ :fhSemester1 => "2020/4/10", :fhSemester2 => "2020/7/30", :lateSemester1 => "2020/9/14", :lateSemester2 => "2021/2/22" })
+    self.semester_periods.each do |semester_period|
+      ins = { :fhSemester1 => semester_period.fh_semester_f.strftime("%Y/%m/%d"), :fhSemester2 => semester_period.fh_semester_s.strftime("%Y/%m/%d"), :lateSemester1 => semester_period.late_semester_f.strftime("%Y/%m/%d"), :lateSemester2 => semester_period.late_semester_s.strftime("%Y/%m/%d") }
+      sp[semester_period.grade - 1] = ins
+    end
+
     #スケジュール
     schedules = Schedule.loadSchedule(self.id)
 
@@ -55,24 +60,24 @@ class Calendar < ApplicationRecord
     authorData = User.joins(:user_details).select("users.*, user_details.*").find_by("users.id = ?", self.author_id)
 
     return ({
-        :id => self.id,
-        :user_id => user.id,
-        :name => self.name,
-        :description => self.description,
-        :key => self.key,
-        :shareBool => self.shareBool,
-        :cloneBool => self.cloneBool,
-        :author_id => self.author_id,
-        :author_name => authorData.name,
-        :color => self.color,
-        :tasks => tasks,
-        :exams => exams,
-        :change_schedules_after => change_schedules_after,
-        :change_schedules_before => change_schedules_before,
-        :semesterPeriod => sp,
-        :schedules => schedules,
-        :transfer_schedule_after => cL1,
-        :transfer_schedule_before => cL2
+      :id => self.id,
+      :user_id => user.id,
+      :name => self.name,
+      :description => self.description,
+      :key => self.key,
+      :shareBool => self.shareBool,
+      :cloneBool => self.cloneBool,
+      :author_id => self.author_id,
+      :author_name => authorData.name,
+      :color => self.color,
+      :tasks => tasks,
+      :exams => exams,
+      :change_schedules_after => change_schedules_after,
+      :change_schedules_before => change_schedules_before,
+      :semesterPeriod => sp,
+      :schedules => schedules,
+      :transfer_schedule_after => cL1,
+      :transfer_schedule_before => cL2
     })
   end
 
