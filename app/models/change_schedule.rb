@@ -37,46 +37,41 @@ class ChangeSchedule < ApplicationRecord
 	end
 	
 	#カレンダーIDから授業変更を取得して、配列に格納する関数
-	def self.createDatekeyArrayOfChangeSchedule(calendar_id)
-		result = []
-		result1 = []
-		self.all.each do |cs|
-			dkArray = DateKeysArray.new
-			result = dkArray.createDateKeysArray(result, cs.afterDate)
-			dkArray1 = DateKeysArray.new
-			result1 = dkArray1.createDateKeysArray(result1, cs.beforeDate)
+	def createDatekeyArrayOfChangeSchedule(change_schedules_before, change_schedules_after, calendar_id)
+		dkArray = DateKeysArray.new
+		change_schedules_after = dkArray.createDateKeysArray(change_schedules_after, self.afterDate)
+		change_schedules_before = dkArray.createDateKeysArray(change_schedules_before, self.beforeDate)
 
-			insSchedule = Schedule.find_by(:id => cs.schedule_id);
-			ins = {
-				:id => cs.id,
-				:calendarId => calendar_id,
-				:title => insSchedule.title,
-				:CoNum => insSchedule.CoNum,
-				:teacher => insSchedule.teacher,
-				:semester => insSchedule.semester,
-				:after_position => cs.position,
-				:grade => insSchedule.grade,
-				:status => insSchedule.status,
-				:afterDate => cs.afterDate
-			}
-			result[cs.afterDate.strftime("%Y").to_i][cs.afterDate.strftime("%m").to_i][cs.afterDate.strftime("%d").to_i].push(ins)
-			ins = {
-				:id => cs.id,
-				:calendarId => calendar_id,
-				:title => insSchedule.title,
-				:CoNum => insSchedule.CoNum,
-				:teacher => insSchedule.teacher,
-				:semester => insSchedule.semester,
-				:before_position => (insSchedule.position % 6).to_i,
-				:after_position => cs.position,
-				:afterDate => cs.afterDate,
-				:grade => insSchedule.grade,
-				:status => insSchedule.status,
-				:beforeDate => cs.beforeDate
-			}
-			result1[cs.beforeDate.strftime("%Y").to_i][cs.beforeDate.strftime("%m").to_i][cs.beforeDate.strftime("%d").to_i].push(ins)
-		end
-		return result1,result
+		insSchedule = Schedule.find_by(:id => self.schedule_id);
+		ins = {
+			:id => self.id,
+			:calendarId => calendar_id,
+			:title => insSchedule.title,
+			:CoNum => insSchedule.CoNum,
+			:teacher => insSchedule.teacher,
+			:semester => insSchedule.semester,
+			:after_position => self.position,
+			:grade => insSchedule.grade,
+			:status => insSchedule.status,
+			:afterDate => self.afterDate
+		}
+		change_schedules_after[self.afterDate.strftime("%Y").to_i][self.afterDate.strftime("%m").to_i][self.afterDate.strftime("%d").to_i].push(ins)
+		ins = {
+			:id => self.id,
+			:calendarId => calendar_id,
+			:title => insSchedule.title,
+			:CoNum => insSchedule.CoNum,
+			:teacher => insSchedule.teacher,
+			:semester => insSchedule.semester,
+			:before_position => (insSchedule.position % 6).to_i,
+			:after_position => self.position,
+			:afterDate => self.afterDate,
+			:grade => insSchedule.grade,
+			:status => insSchedule.status,
+			:beforeDate => self.beforeDate
+		}
+		change_schedules_before[self.beforeDate.strftime("%Y").to_i][self.beforeDate.strftime("%m").to_i][self.beforeDate.strftime("%d").to_i].push(ins)
+	return change_schedules_before,change_schedules_after
 	end
 	
     def self.clone(cal_id, newcal_id)

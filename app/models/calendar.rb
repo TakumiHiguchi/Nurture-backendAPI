@@ -48,7 +48,11 @@ class Calendar < ApplicationRecord
     end
 
     #授業変更
-    change_schedules_before, change_schedules_after = self.change_schedules.createDatekeyArrayOfChangeSchedule(self.id)
+    change_schedules_before = []
+    change_schedules_after = []
+    self.change_schedules.each do |change_schedule|
+      change_schedules_before, change_schedules_after = change_schedule.createDatekeyArrayOfChangeSchedule(change_schedules_before, change_schedules_after, self.id)
+    end
 
     #学期の期間
     sp = Array.new(10,{ :fhSemester1 => "2020/4/10", :fhSemester2 => "2020/7/30", :lateSemester1 => "2020/9/14", :lateSemester2 => "2021/2/22" })
