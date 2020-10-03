@@ -29,8 +29,11 @@ class Calendar < ApplicationRecord
   end
 
   def create_calendar_hash(user)
-    #Taskを取得して格納する
-    tasks = Task.createDatekeyArrayOfTask(self.id)
+    tasks = []
+    self.tasks.each do |task|
+      tasks = task.createDatekeyArrayOfTask(tasks,self.id)
+    end
+
     #Examを取得して格納する
     exams = Exam.createDatekeyArrayOfExam(self.id)
     #授業変更を取得して格納する
@@ -69,4 +72,6 @@ class Calendar < ApplicationRecord
         :transfer_schedule_before => cL2
     })
   end
+
+  
 end

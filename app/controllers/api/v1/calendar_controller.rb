@@ -5,21 +5,18 @@ class Api::V1::CalendarController < ApplicationController
     errorJson = RenderErrorJson.new()
     if @userSession
       #ユーザーのカレンダー取得
-      result = @user.calendars.map do |calendar|
+      result = @user.calendars.includes(:tasks).map do |calendar|
         calendar.create_calendar_hash(@user)
       end
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :calendars => result
+      })
+    else
+      render json: errorJson.createError(code:'AE_0001',api_version:'v1')
     end
-        
-        if result
-            render :json => JSON.pretty_generate({
-                                              :status => 'SUCCESS',
-                                              :api_version => 'v1',
-                                              :calendars => result
-            })
-        else
-          render json: errorJson.createError(code:'AE_0001',api_version:'v1')
-        end
-    end
+  end
     def create
         if @userSession
             o = [('a'..'z'), ('A'..'Z'), ('0'..'9')].map { |i| i.to_a }.flatten

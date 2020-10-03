@@ -9,24 +9,20 @@ class Task < ApplicationRecord
     belongs_to :calendar
 
     #カレンダーIDからTaskを取得して、配列に格納する
-    def self.createDatekeyArrayOfTask(cal_id)
-        taskResult = []
-        tasks = self.where(:calendar_id => cal_id)
-        tasks.each do |task|
-            dkArray = DateKeysArray.new
-            taskResult = dkArray.createDateKeysArray(taskResult, task.taskDate)
-            ins = {
-                :id => task.id,
-                :calendarId => cal_id,
-                :title => task.title,
-                :content => task.content,
-                :date => task.taskDate,
-                :position => task.position,
-                :complete => task.complete,
-                :label => "タスク"
-            }
-            taskResult[task.taskDate.strftime("%Y").to_i][task.taskDate.strftime("%m").to_i][task.taskDate.strftime("%d").to_i].push(ins)
-        end
+    def createDatekeyArrayOfTask(taskResult, calendar_id)
+        dkArray = DateKeysArray.new
+        taskResult = dkArray.createDateKeysArray(taskResult, self.taskDate)
+        ins = {
+          :id => self.id,
+          :calendarId => calendar_id,
+          :title => self.title,
+          :content => self.content,
+          :date => self.taskDate,
+          :position => self.position,
+          :complete => self.complete,
+          :label => "タスク"
+        }
+        taskResult[self.taskDate.strftime("%Y").to_i][self.taskDate.strftime("%m").to_i][self.taskDate.strftime("%d").to_i].push(ins)
         return taskResult
     end
     def self.clone(cal_id, newcal_id)
