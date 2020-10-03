@@ -33,13 +33,14 @@ class Calendar < ApplicationRecord
     self.tasks.each do |task|
       tasks = task.createDatekeyArrayOfTask(tasks,self.id)
     end
+    
     exams = []
     self.exams.each do |exam|
       exams = exam.createDatekeyArrayOfTask(exams,self.id)
     end
 
-    #授業変更を取得して格納する
-    cs0,cs1 = ChangeSchedule.createDatekeyArrayOfChangeSchedule(self.id)
+    change_schedules_before, change_schedules_after = self.change_schedules.createDatekeyArrayOfChangeSchedule(self.id)
+
     #学期の期間を取得して格納する
     sp = SemesterPeriod.loadUserPeriod(self.id)
     #スケジュール
@@ -66,8 +67,8 @@ class Calendar < ApplicationRecord
         :color => self.color,
         :tasks => tasks,
         :exams => exams,
-        :change_schedules_after => cs0,
-        :change_schedules_before => cs1,
+        :change_schedules_after => change_schedules_after,
+        :change_schedules_before => change_schedules_before,
         :semesterPeriod => sp,
         :schedules => schedules,
         :transfer_schedule_after => cL1,
