@@ -13,6 +13,7 @@ class Calendar < ApplicationRecord
   has_many :exams, :dependent => :destroy
   has_many :change_schedules, :dependent => :destroy
   has_many :semester_periods, :dependent => :destroy
+  has_many :transfer_schedules, :dependent => :destroy
 
   def self.search(query)
     return self.all unless query
@@ -39,6 +40,14 @@ class Calendar < ApplicationRecord
       exams = exam.createDatekeyArrayOfTask(exams,self.id)
     end
 
+    #振替
+    transfer_schedules_before = []
+    transfer_schedules_after = []
+    self.transfer_schedules.each do |transfer_schedule|
+      transfer_schedules_before, transfer_schedules_after = transfer_schedule.loadCL(transfer_schedules_before, transfer_schedules_after, self.id)
+    end
+
+    #授業変更
     change_schedules_before, change_schedules_after = self.change_schedules.createDatekeyArrayOfChangeSchedule(self.id)
 
     #学期の期間
@@ -53,10 +62,6 @@ class Calendar < ApplicationRecord
     self.schedules.each do |schedule|
       schedules = schedule.loadSchedule(schedules,self.id)
     end
-
-
-    #振替
-    cL1,cL2 = TransferSchedule.loadCL(self.id)
 
     #作成者
     authorData = User.joins(:user_details).select("users.*, user_details.*").find_by("users.id = ?", self.author_id)
@@ -78,8 +83,8 @@ class Calendar < ApplicationRecord
       :change_schedules_before => change_schedules_before,
       :semesterPeriod => sp,
       :schedules => schedules,
-      :transfer_schedule_after => cL1,
-      :transfer_schedule_before => cL2
+      :transfer_schedule_after => transfer_schedules_after,
+      :transfer_schedule_before => transfer_schedules_before
     })
   end
 

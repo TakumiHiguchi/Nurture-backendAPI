@@ -5,7 +5,7 @@ class Api::V1::CalendarController < ApplicationController
     errorJson = RenderErrorJson.new()
     if @userSession
       #ユーザーのカレンダー取得
-      result = @user.calendars.includes(:tasks, :exams, :semester_periods, :calendar_schedule_relations, :schedules).map do |calendar|
+      result = @user.calendars.includes(:tasks, :exams, :semester_periods, :calendar_schedule_relations, :schedules, :transfer_schedules).map do |calendar|
         calendar.create_calendar_hash(@user)
       end
       render :json => JSON.pretty_generate({
