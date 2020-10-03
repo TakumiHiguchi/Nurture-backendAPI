@@ -33,9 +33,11 @@ class Calendar < ApplicationRecord
     self.tasks.each do |task|
       tasks = task.createDatekeyArrayOfTask(tasks,self.id)
     end
+    exams = []
+    self.exams.each do |exam|
+      exams = exam.createDatekeyArrayOfTask(exams,self.id)
+    end
 
-    #Examを取得して格納する
-    exams = Exam.createDatekeyArrayOfExam(self.id)
     #授業変更を取得して格納する
     cs0,cs1 = ChangeSchedule.createDatekeyArrayOfChangeSchedule(self.id)
     #学期の期間を取得して格納する
