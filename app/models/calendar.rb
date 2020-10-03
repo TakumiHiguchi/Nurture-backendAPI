@@ -49,8 +49,10 @@ class Calendar < ApplicationRecord
     end
 
     #スケジュール
-    schedules = Schedule.loadSchedule(self.id)
-
+    schedules = (0...10).map { (0...2).map {(0..6).map {Array.new(6,0)}}} #スケジュール配列の作成し、0で初期化
+    self.schedules.each do |schedule|
+      schedules = schedule.loadSchedule(schedules,self.id)
+    end
 
 
     #振替
