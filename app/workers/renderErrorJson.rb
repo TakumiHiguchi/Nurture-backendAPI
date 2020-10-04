@@ -29,6 +29,13 @@ class RenderErrorJson
           error_code: props[:code],
           mes:'カレンダーをうまく変更できませんでした'
         })
+      when 'AE_0011'
+        json = JSON.pretty_generate({
+          status:'ERROR',
+          api_version: props[:api_version],
+          error_code: props[:code],
+          mes:'カレンダーをうまく削除できませんでした'
+        })
     end
     return json
   end

@@ -115,4 +115,6 @@ class Api::V1::CalendarShareController < ApplicationController
             end
         end
     end
+    # follow deleteするメソッドを作る
+    #フロントも変更
 end
