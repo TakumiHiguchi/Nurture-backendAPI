@@ -8,7 +8,7 @@ class Api::V1::ExamController < ApplicationController
     end
 
     def create
-        if @userSession && @calendarOwn
+        
             #sessionが有効だったら試験を作る
             result,mes = Exam.check_and_create(params[:calendarId], params[:title], params[:content], params[:examdate], params[:position])
             if result
@@ -16,11 +16,6 @@ class Api::V1::ExamController < ApplicationController
             else
                 mes = "試験の作成に失敗しました。"
             end
-        else
-            result = false
-            mes = "セッションが無効です"
-            mes = "カレンダーの所有者ではありません" if !@calendarOwn
-        end
         
         if result
             render :json => JSON.pretty_generate({
