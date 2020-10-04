@@ -25,20 +25,14 @@ class Task < ApplicationRecord
     taskResult[self.taskDate.strftime("%Y").to_i][self.taskDate.strftime("%m").to_i][self.taskDate.strftime("%d").to_i].push(ins)
     return taskResult
   end
-  def self.clone(cal_id, newcal_id)
-    tasks = Task.where(:calendar_id => cal_id)
-    bl = true
-    tasks.each do |task|
-      if bl
-        bl = Task.create(
-          :calendar_id => newcal_id, 
-          :title => task.title, 
-          :content => task.content, 
-          :taskDate => task.taskDate, 
-          :position => task.position
-        )
-      end
-    end
-    return bl
+
+  def clone(newcalender_id)
+    Task.create(
+      :calendar_id => newcalender_id, 
+      :title => self.title, 
+      :content => self.content, 
+      :taskDate => self.taskDate, 
+      :position => self.position
+    )
   end
 end

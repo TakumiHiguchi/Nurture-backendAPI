@@ -118,7 +118,7 @@ class Calendar < ApplicationRecord
       :author_id => user.id
     )
     if user.save
-      Task.clone(self.id, new_calendar.id)
+      self.tasks.each{ |task| task.clone(new_calendar.id) }
       Exam.clone(self.id, new_calendar.id)
       CalendarScheduleRelation.clone(self.id, new_calendar.id)
       ChangeSchedule.clone(self.id, new_calendar.id)
