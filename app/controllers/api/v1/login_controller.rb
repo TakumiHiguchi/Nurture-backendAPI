@@ -35,7 +35,7 @@ class Api::V1::LoginController < ApplicationController
         end
         
         
-        u = User.joins(:user_details).select("users.*, user_details.*, users.id AS user_id").find_by(:key => userKey,:session => session)
+        u = User.find_by(:key => userKey,:session => session).user_detail
         ex ? mes="お帰りなさい#{u.name}さん" : mes="こんにちは。#{u.name}さん"
         #ユーザが登録した学期の期間を整形して配列で返す処理
         #semesterDate = SemesterPeriod.loadUserPeriod(u.id)

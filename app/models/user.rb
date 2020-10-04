@@ -5,7 +5,7 @@ class User < ApplicationRecord
     #アソシエーション
     has_many :user_calendar_relations
     has_many :calendars, :through => :user_calendar_relations
-    has_many :user_details
+    has_one :user_detail
     
     
     def self.exists_and_create(key,ses)

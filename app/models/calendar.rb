@@ -22,7 +22,6 @@ class Calendar < ApplicationRecord
       :exams,
       :semester_periods,
       :change_schedules,
-      :calendar_schedule_relations,
       :schedules,
       :transfer_schedules
     )
@@ -81,7 +80,7 @@ class Calendar < ApplicationRecord
     end
 
     #作成者
-    authorData = User.joins(:user_details).select("users.*, user_details.*").find_by("users.id = ?", self.author_id)
+    authorData = UserDetail.find_by(user_id: self.author_id)
 
     return ({
       :id => self.id,

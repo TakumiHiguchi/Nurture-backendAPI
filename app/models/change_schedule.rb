@@ -75,7 +75,7 @@ class ChangeSchedule < ApplicationRecord
 			:beforeDate => self.beforeDate
 		}
 		change_schedules_before[self.beforeDate.strftime("%Y").to_i][self.beforeDate.strftime("%m").to_i][self.beforeDate.strftime("%d").to_i].push(ins)
-	return change_schedules_before,change_schedules_after
+		return change_schedules_before,change_schedules_after
 	end
 	
     def self.clone(cal_id, newcal_id)

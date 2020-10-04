@@ -27,7 +27,7 @@ class Schedule < ApplicationRecord
       :scheduleId => self.id
     }
     position = self.position
-    reges_grade = self.calendar_schedule_relations.find_by(calendar_id: calendar_id,schedule_id: self.id).reges_grade.to_i 
+    reges_grade = CalendarScheduleRelation.find_by(calendar_id: calendar_id,schedule_id: self.id).reges_grade.to_i 
     if self.semester == "前学期"
       schedule[(reges_grade - 1)][0][position / 6][position % 6] = insArray
     else
