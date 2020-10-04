@@ -1,24 +1,25 @@
-# README
+# N:urture backendAPI
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+N:urtureのbackendAPIです。頑張ってリファクタリングしていますが、コードはかなり汚いと思います。
 
-Things you may want to cover:
+## 注意
+- dockerが使える環境はご自身でご用意してください。
 
-* Ruby version
+## 使い方
+1. N:urture backendAPIをcloneしましょう
+  ```
+  $ git clone https://github.com/TakumiHiguchi/Nurture-backendAPI.git
+  ```
 
-* System dependencies
+2. ディレクトリに移動しましょう
+  ```
+  $ cd Nurture-backendAPI
+  ```
+  
+3. dockerちゃんに全てお任せしましょう
+  ```
+  $ docker-compose up
+  ```
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+4. N:urture（frontend）を起動しましょう
+  [https://github.com/TakumiHiguchi/Nurture-front](url)を見て頑張ってください。
