@@ -10,48 +10,20 @@ class Api::V1::CalendarShareController < ApplicationController
     })
   end
 
-    def clone
-        if @userSession
-            ins = Calendar.find_by(:id => params[:calendarId])
-            if ins.cloneBool && ins.shareBool
-                o = [('a'..'z'), ('A'..'Z'), ('0'..'9')].map { |i| i.to_a }.flatten
-                key = (0...20).map { o[rand(o.length)] }.join
-                result = Calendar.create(
-                    :key => key,
-                    :name => ins.name,
-                    :description => ins.description,
-                    :shareBool => ins.shareBool,
-                    :cloneBool => ins.cloneBool,
-                    :author_id => @user.id
-                )
-                if result 
-                    UserCalendarRelation.create(:user_id => @user.id, :calendar_id => result.id) 
-                    Task.clone(ins.id, result.id)
-                    Exam.clone(ins.id, result.id)
-                    CalendarScheduleRelation.clone(ins.id, result.id)
-                    ChangeSchedule.clone(ins.id, result.id)
-                    SemesterPeriod.clone(ins.id, result.id)
-                    TransferSchedule.clone(ins.id, result.id)
-                end
-            else
-                result = false
-                mes = "クローンが許可されていません。"
-            end
-            if result
-                render :json => JSON.pretty_generate({
-                                                  :status => 'SUCCESS',
-                                                  :api_version => 'v1',
-                                                  :mes => "カレンダーをコピーしました"
-                })
-            else
-                render :json => JSON.pretty_generate({
-                                                  :status => 'ERROR',
-                                                  :api_version => 'v1',
-                                                  :mes => mes
-                })
-            end
-        end
+  def clone
+    errorJson = RenderErrorJson.new()
+    @calendar = Calendar.share_only.clone_only.find(params[:calendarId])
+    if @calendar.present?
+      @calendar.clone(@user)
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "カレンダーをコピーしました"
+      })
+    else
+      render json: errorJson.createError(code:'AE_0013',api_version:'v1')
     end
+  end
     def follow
         if @userSession
             ins = Calendar.find_by(:id => params[:calendarId])
@@ -73,4 +45,5 @@ class Api::V1::CalendarShareController < ApplicationController
     end
     # follow deleteするメソッドを作る
     #フロントも変更
+
 end

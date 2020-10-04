@@ -26,8 +26,8 @@ class Calendar < ApplicationRecord
       :transfer_schedules
     )
   }
-
   scope :share_only, -> {where(:shareBool => true)}
+  scope :clone_only, -> {where(:shareBool => true)}
   scope :not_author, -> (user) {where.not(:author_id => user.id)}
 
   def self.search(query)
@@ -106,6 +106,26 @@ class Calendar < ApplicationRecord
       :transfer_schedule_before => transfer_schedules_before
     })
   end
-
   
+  def clone(user)
+    base_worker = BaseWorker.new
+    new_calendar = user.calendars.build(
+      :key => base_worker.get_key,
+      :name => self.name,
+      :description => self.description,
+      :shareBool => self.shareBool,
+      :cloneBool => self.cloneBool,
+      :author_id => user.id
+    )
+    if user.save
+      Task.clone(self.id, new_calendar.id)
+      Exam.clone(self.id, new_calendar.id)
+      CalendarScheduleRelation.clone(self.id, new_calendar.id)
+      ChangeSchedule.clone(self.id, new_calendar.id)
+      SemesterPeriod.clone(self.id, new_calendar.id)
+      TransferSchedule.clone(self.id, new_calendar.id)
+    else
+      render json: errorJson.createError(code:'AE_0010',api_version:'v1')
+    end
+  end
 end
