@@ -13,7 +13,7 @@ class Api::V1::CalendarController < ApplicationController
 
   def create    
     errorJson = RenderErrorJson.new()
-    result = @user.calendars.build(create_calendar_params)
+    @user.calendars.build(create_calendar_params)
 
     if @user.save
       render :json => JSON.pretty_generate({
@@ -25,40 +25,20 @@ class Api::V1::CalendarController < ApplicationController
       render json: errorJson.createError(code:'AE_0010',api_version:'v1')
     end
   end
-    def update
-        if @userSession && @calendarOwn
-            
-            if params[:name] == "" 
-                calBoolean = false
-                mes = "名前は最低1文字以上でなくてはなりません"
-            else
-                calendar = Calendar.find_by(:id => params[:calendarId])
-                calBoolean = calendar.update(
-                    :name => params[:name],
-                    :description => params[:description],
-                    :color => params[:color],
-                    :shareBool => params[:shareBool],
-                    :cloneBool => params[:cloneBool]
-                )
-            end
-        else
-            calBoolean = false
-            mes = "アクセス権限がありません。"
-        end
-        if calBoolean
-            render :json => JSON.pretty_generate({
-                                              :status => 'SUCCESS',
-                                              :api_version => 'v1',
-                                              :mes => "カレンダーを変更しました。"
-            })
-        else
-            render :json => JSON.pretty_generate({
-                                              :status => 'ERROR',
-                                              :api_version => 'v1',
-                                              :mes => mes
-            })
-        end
+
+  def update
+    errorJson = RenderErrorJson.new()
+    if @calendar.update(update_calendar_params)
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "カレンダーを変更しました。"
+      })
+    else
+      render json: errorJson.createError(code:'AE_0011',api_version:'v1')
     end
+  end
+
     def destroy
         check = UserCalendarRelation.where(:user_id => @user.id).count
         if @userSession && check > 1
@@ -111,6 +91,17 @@ class Api::V1::CalendarController < ApplicationController
         :shareBool => params[:shareBool],
         :cloneBool => params[:cloneBool],
         :author_id => @user.id
+      })
+    end
+
+    def update_calendar_params
+      base_worker = BaseWorker.new
+      return({
+        :name => params[:name],
+        :description => params[:description],
+        :color => params[:color],
+        :shareBool => params[:shareBool],
+        :cloneBool => params[:cloneBool]
       })
     end
 end
