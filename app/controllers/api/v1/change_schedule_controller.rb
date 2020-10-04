@@ -8,13 +8,9 @@ class Api::V1::ChangeScheduleController < ApplicationController
     end
 
     def create
-        if @userSession && @calendarOwn
             #sessionが有効だったら授業の移動を作る
             result,mes = ChangeSchedule.check_and_create(params[:calendarId], params[:selectSchedule_id], params[:beforeDate], params[:afterDate], params[:position])
-        else
-            result = false
-            mes = "セッションが無効です"
-        end
+
         
         if result
             render :json => JSON.pretty_generate({
