@@ -1,14 +1,14 @@
 class Api::V1::CanceledLectureController < ApplicationController
-    before_action :userSignedin?, only: [:create] #セッションの確認
-    before_action :calendarOwn?, only: [:create] #カレンダーの所有者か確認
+    before_action :userSignedin?, :only => [:create] #セッションの確認
+    before_action :calendarOwn?, :only => [:create] #カレンダーの所有者か確認
     def create
         if @userSession && @calendarOwn
             #sessionが有効だったら作る
             result = CanceledLecture.create(
-                calendar_id:params[:calendarId], 
-                grade: params[:grade], 
-                clDate:params[:date], 
-                position:params[:position]
+                :calendar_id => params[:calendarId], 
+                :grade => params[:grade], 
+                :clDate => params[:date], 
+                :position => params[:position]
             )
             result = result.save
             if result
@@ -23,16 +23,16 @@ class Api::V1::CanceledLectureController < ApplicationController
         end
         
         if result
-            render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes: mes,
+            render :json => JSON.pretty_generate({
+                                              :status => 'SUCCESS',
+                                              :api_version => 'v1',
+                                              :mes => mes,
             })
         else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes: mes
+            render :json => JSON.pretty_generate({
+                                              :status => 'ERROR',
+                                              :api_version => 'v1',
+                                              :mes => mes
             })
         end
     end

@@ -10,7 +10,7 @@ GOOGLE_OPENID_CONFIGURATION_HOST = "https://accounts.google.com/.well-known/open
 TIMEOUT = 5
 class GoogleConfiguration
     def userData(token)
-        aud = ['653992313170-7iqt3ahq46pg322edi3l117kife5e6d8.apps.googleusercontent.com']
+        aud = ['653992313170-okt2tfmukp5eg4s4g8fiaf6u3261a0ov.apps.googleusercontent.com']
         iss = ['accounts.google.com']
         
         #トークンのヘッダーを取得
@@ -22,7 +22,7 @@ class GoogleConfiguration
             publicKey = rsaPubkey(token_header["kid"])
             
             if !publicKey.nil?
-                decoded_token = JWT.decode token, publicKey, true, { verify_iat: true, iss: iss, verify_iss: true, aud: aud, verify_aud: true, algorithm: 'RS256' }
+                decoded_token = JWT.decode token, publicKey, true, { :verify_iat => true, :iss => iss, :verify_iss => true, :aud => aud, :verify_aud => true, :algorithm => 'RS256' }
             end
             return decoded_token[0]
         else

@@ -1,45 +1,45 @@
 class Api::V1::UserController < ApplicationController
     require 'digest/sha2' #ハッシュ
     require 'date'
-    before_action :userSignedin?, only: [:setUserSchedule, :update] #セッションの確認
-    before_action :calendarOwn?, only: [:setUserSchedule] #カレンダーの所有者か確認
+    before_action :userSignedin?, :only => [:setUserSchedule, :update] #セッションの確認
+    before_action :calendarOwn?, :only => [:setUserSchedule] #カレンダーの所有者か確認
     
     
     def setUserSchedule
         if @userSession && @calendarOwn
-            schedule = Schedule.find_by(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade])
+            schedule = Schedule.find_by(:title => params[:title],:teacher => params[:teacher], :semester => params[:semester], :position => params[:position], :grade => params[:grade])
             #scheduleがなかった場合作る
-            schedule = Schedule.create(title: params[:title],teacher: params[:teacher], semester: params[:semester], position: params[:position], grade:params[:grade]) if schedule.nil?
+            schedule = Schedule.create(:title => params[:title],:teacher => params[:teacher], :semester => params[:semester], :position => params[:position], :grade => params[:grade]) if schedule.nil?
             
             relation,result,mes = CalendarScheduleRelation.exists_and_create(params[:calendarId], schedule, params[:user_grade].to_i)
 
             
             if result
-                render json: JSON.pretty_generate({
-                                                status:'SUCCESS',
-                                                api_version: 'v1',
-                                                mes: mes
+                render :json => JSON.pretty_generate({
+                                                :status => 'SUCCESS',
+                                                :api_version => 'v1',
+                                                :mes => mes
                 })
             else
-                render json: JSON.pretty_generate({
-                                                status:'ERROR',
-                                                api_version: 'v1',
-                                                mes: mes
+                render :json => JSON.pretty_generate({
+                                                :status => 'ERROR',
+                                                :api_version => 'v1',
+                                                :mes => mes
                 })
             end
         else
             mes = "セッションが無効です"
-            render json: JSON.pretty_generate({
-                status:'ERROR',
-                api_version: 'v1',
-                mes: mes
+            render :json => JSON.pretty_generate({
+                :status => 'ERROR',
+                :api_version => 'v1',
+                :mes => mes
             })
         end
     end
     
     def loadUserDetail
         #sessionの確認
-        user = User.find_by(key: params[:key],session: params[:session])
+        user = User.find_by(:key => params[:key],:session => params[:session])
         userSession = user.maxAge.to_i > Time.now.to_i if user
         
         if userSession
@@ -54,35 +54,35 @@ class Api::V1::UserController < ApplicationController
         end
         
         if result_schedule
-            render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes: mes,
-                                              schedules: result_schedule
+            render :json => JSON.pretty_generate({
+                                              :status => 'SUCCESS',
+                                              :api_version => 'v1',
+                                              :mes => mes,
+                                              :schedules => result_schedule
             })
         else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes: mes
+            render :json => JSON.pretty_generate({
+                                              :status => 'ERROR',
+                                              :api_version => 'v1',
+                                              :mes => mes
             })
         end
     end
     def update
         if @userSession
-            userDetail = UserDetail.find_by(user_id:@user.id)
-            result = userDetail.update(name:params[:name])
+            userDetail = UserDetail.find_by(:user_id => @user.id)
+            result = userDetail.update(:name => params[:name])
             if result
-                render json: JSON.pretty_generate({
-                                                  status:'SUCCESS',
-                                                  api_version: 'v1',
-                                                  mes: "ユーザーを更新しました"
+                render :json => JSON.pretty_generate({
+                                                  :status => 'SUCCESS',
+                                                  :api_version => 'v1',
+                                                  :mes => "ユーザーを更新しました"
                 })
             else
-                render json: JSON.pretty_generate({
-                                                  status:'ERROR',
-                                                  api_version: 'v1',
-                                                  mes: "ユーザーの更新に失敗しました"
+                render :json => JSON.pretty_generate({
+                                                  :status => 'ERROR',
+                                                  :api_version => 'v1',
+                                                  :mes => "ユーザーの更新に失敗しました"
                 })
             end
         end

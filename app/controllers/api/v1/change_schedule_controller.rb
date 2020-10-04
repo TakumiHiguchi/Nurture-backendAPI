@@ -1,6 +1,6 @@
 class Api::V1::ChangeScheduleController < ApplicationController
-    before_action :userSignedin?, only: [:index,:create,:update,:destroy] #セッションの確認
-    before_action :calendarOwn?, only: [:create, :update, :destroy] #カレンダーの所有者か確認
+    before_action :userSignedin?, :only => [:index,:create,:update,:destroy] #セッションの確認
+    before_action :calendarOwn?, :only => [:create, :update, :destroy] #カレンダーの所有者か確認
     
     def index
         if @userSession
@@ -17,16 +17,16 @@ class Api::V1::ChangeScheduleController < ApplicationController
         end
         
         if result
-            render json: JSON.pretty_generate({
-                                              status:'SUCCESS',
-                                              api_version: 'v1',
-                                              mes: mes,
+            render :json => JSON.pretty_generate({
+                                              :status => 'SUCCESS',
+                                              :api_version => 'v1',
+                                              :mes => mes,
             })
         else
-            render json: JSON.pretty_generate({
-                                              status:'ERROR',
-                                              api_version: 'v1',
-                                              mes: mes
+            render :json => JSON.pretty_generate({
+                                              :status => 'ERROR',
+                                              :api_version => 'v1',
+                                              :mes => mes
             })
         end
     end
@@ -35,18 +35,18 @@ class Api::V1::ChangeScheduleController < ApplicationController
     end
     def destroy
         if @userSession && @calendarOwn
-          ins = ChangeSchedule.find_by(calendar_id:params[:calendarId], id:params[:change_schedule_id])
+          ins = ChangeSchedule.find_by(:calendar_id => params[:calendarId], :id => params[:change_schedule_id])
           if ins.destroy
-              render json: JSON.pretty_generate({
-                                                status:'SUCCESS',
-                                                api_version: 'v1',
-                                                mes:"授業変更を削除しました。"
+              render :json => JSON.pretty_generate({
+                                                :status => 'SUCCESS',
+                                                :api_version => 'v1',
+                                                :mes => "授業変更を削除しました。"
                                                 })
           else
-              render json: JSON.pretty_generate({
-                                                  status:'Error',
-                                                  api_version: 'v1',
-                                                  mes: '授業変更の削除に失敗しました。'
+              render :json => JSON.pretty_generate({
+                                                  :status => 'Error',
+                                                  :api_version => 'v1',
+                                                  :mes => '授業変更の削除に失敗しました。'
               
                                                   })
           end
