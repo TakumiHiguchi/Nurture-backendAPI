@@ -11,23 +11,15 @@ class Api::V1::CalendarController < ApplicationController
     })
   end
 
-  def create
-    base_worker = BaseWorker.new
+  def create    
     errorJson = RenderErrorJson.new()
-    result = @user.calendars.build(
-      :key => base_worker.get_key,
-      :name => params[:name],
-      :description => params[:description],
-      :shareBool => params[:shareBool],
-      :cloneBool => params[:cloneBool],
-      :author_id => @user.id
-    )
+    result = @user.calendars.build(create_calendar_params)
 
-    if result.save
+    if @user.save
       render :json => JSON.pretty_generate({
         :status => 'SUCCESS',
         :api_version => 'v1',
-        :mes => "カレンダーを作成しました。"
+        :mes => 'カレンダーを作成しました。'
       })
     else
       render json: errorJson.createError(code:'AE_0010',api_version:'v1')
@@ -108,5 +100,17 @@ class Api::V1::CalendarController < ApplicationController
               
                                                   })
         end
+    end
+  private
+    def create_calendar_params
+      base_worker = BaseWorker.new
+      return({
+        :key => base_worker.get_key,
+        :name => params[:name],
+        :description => params[:description],
+        :shareBool => params[:shareBool],
+        :cloneBool => params[:cloneBool],
+        :author_id => @user.id
+      })
     end
 end
