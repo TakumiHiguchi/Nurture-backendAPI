@@ -27,6 +27,9 @@ class Calendar < ApplicationRecord
     )
   }
 
+  scope :share_only, -> {where(:shareBool => true)}
+  scope :not_author, -> (user) {where.not(:author_id => user.id)}
+
   def self.search(query)
     return self.all unless query
     
