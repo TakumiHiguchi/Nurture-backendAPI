@@ -66,7 +66,6 @@ class Api::V1::CalendarController < ApplicationController
   end
 
   def update_calendar_params
-    base_worker = BaseWorker.new
     return({
       :name => params[:name],
       :description => params[:description],

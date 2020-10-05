@@ -6,10 +6,12 @@ class RenderErrorJson
       error_code: props[:code]
     }
     case props[:code]
+      when 'SE_0001'
+        error_base[:mes] = 'サインインに失敗しました'
       when 'AE_0001'
         error_base[:mes] = 'アクセス権限がありません。ログインしてください'
       when 'AE_0002'
-        error_base[:mes] = 'カレンダーへのアクセス権限がありません。'
+        error_base[:mes] = 'カレンダーへのアクセス権限がありません'
       when 'AE_0010'
         error_base[:mes] = 'カレンダーをうまく作成できませんでした'
       when 'AE_0011'
