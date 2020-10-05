@@ -38,6 +38,8 @@ class RenderErrorJson
         error_base[:mes] = 'スケジュールをうまく作成できませんでした'
       when 'AE_0036'
         error_base[:mes] = 'すでにそのスケジュールは登録されています'
+      when 'AE_0037'
+        error_base[:mes] = 'スケジュールをうまく登録できませんでした'
       when 'AE_0040'
         error_base[:mes] = 'タスクをうまく登録できませんでした'
       when 'AE_0041'
