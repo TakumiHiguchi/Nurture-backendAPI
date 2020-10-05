@@ -29,7 +29,7 @@ class Api::V1::ScheduleController < ApplicationController
     end
     def create
       check = Schedule.where(:title => params[:title], :teacher => params[:teacher], :semester => params[:semester], :position => params[:position], :grade => params[:grade])
-      if @userSession && check.length <= 0
+      if check.length <= 0
         result = Schedule.create(
           :title => params[:title],
           :CoNum => params[:number],

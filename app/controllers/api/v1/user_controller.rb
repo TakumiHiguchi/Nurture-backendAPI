@@ -6,7 +6,6 @@ class Api::V1::UserController < ApplicationController
     
     
     def setUserSchedule
-        if @userSession && @calendarOwn
             schedule = Schedule.find_by(:title => params[:title],:teacher => params[:teacher], :semester => params[:semester], :position => params[:position], :grade => params[:grade])
             #scheduleがなかった場合作る
             schedule = Schedule.create(:title => params[:title],:teacher => params[:teacher], :semester => params[:semester], :position => params[:position], :grade => params[:grade]) if schedule.nil?
@@ -27,14 +26,6 @@ class Api::V1::UserController < ApplicationController
                                                 :mes => mes
                 })
             end
-        else
-            mes = "セッションが無効です"
-            render :json => JSON.pretty_generate({
-                :status => 'ERROR',
-                :api_version => 'v1',
-                :mes => mes
-            })
-        end
     end
     
     def loadUserDetail

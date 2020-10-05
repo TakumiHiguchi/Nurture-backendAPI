@@ -10,21 +10,13 @@ class Api::V1::TaskController < ApplicationController
         
     end
     def create
-        if @userSession && @calendarOwn
-            #sessionが有効だったらタスクを作る
-            result = Task.create(:calendar_id => params[:calendarId], :title => params[:title], :content => params[:content], :taskDate => params[:taskdate], :position => params[:position])
-            result = result.save
-            if result
-                mes = "タスクを作成しました"
-            else
-                mes = "タスクの作成に失敗しました。"
-            end
+        result = Task.create(:calendar_id => params[:calendarId], :title => params[:title], :content => params[:content], :taskDate => params[:taskdate], :position => params[:position])
+        result = result.save
+        if result
+            mes = "タスクを作成しました"
         else
-            result = false
-            mes = "セッションが無効です"
-            mes = "カレンダーの所有者ではありません" if !@calendarOwn
+            mes = "タスクの作成に失敗しました。"
         end
-        
         if result
             render :json => JSON.pretty_generate({
                                               :status => 'SUCCESS',
@@ -32,7 +24,7 @@ class Api::V1::TaskController < ApplicationController
                                               :mes => mes,
             })
         else
-            render :json => JSON.pretty_generate({
+            render :json => JSON.pretty_generate({ 
                                               :status => 'ERROR',
                                               :api_version => 'v1',
                                               :mes => mes

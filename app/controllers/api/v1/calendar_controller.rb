@@ -13,7 +13,7 @@ class Api::V1::CalendarController < ApplicationController
 
   def create    
     errorJson = RenderErrorJson.new()
-    result = @user.calendars.build(create_calendar_params)
+    @user.calendars.build(create_calendar_params)
 
     if @user.save
       render :json => JSON.pretty_generate({
@@ -25,92 +25,54 @@ class Api::V1::CalendarController < ApplicationController
       render json: errorJson.createError(code:'AE_0010',api_version:'v1')
     end
   end
-    def update
-        if @userSession && @calendarOwn
-            
-            if params[:name] == "" 
-                calBoolean = false
-                mes = "名前は最低1文字以上でなくてはなりません"
-            else
-                calendar = Calendar.find_by(:id => params[:calendarId])
-                calBoolean = calendar.update(
-                    :name => params[:name],
-                    :description => params[:description],
-                    :color => params[:color],
-                    :shareBool => params[:shareBool],
-                    :cloneBool => params[:cloneBool]
-                )
-            end
-        else
-            calBoolean = false
-            mes = "アクセス権限がありません。"
-        end
-        if calBoolean
-            render :json => JSON.pretty_generate({
-                                              :status => 'SUCCESS',
-                                              :api_version => 'v1',
-                                              :mes => "カレンダーを変更しました。"
-            })
-        else
-            render :json => JSON.pretty_generate({
-                                              :status => 'ERROR',
-                                              :api_version => 'v1',
-                                              :mes => mes
-            })
-        end
-    end
-    def destroy
-        check = UserCalendarRelation.where(:user_id => @user.id).count
-        if @userSession && check > 1
-            if !@calendarOwn
-                ens = UserCalendarRelation.find_by(:calendar_id => params[:calendarId], :user_id => @user.id)
-                ens.destroy
-                render :json => JSON.pretty_generate({
-                                                    :status => 'SUCCESS',
-                                                    :api_version => 'v1',
-                                                    :mes => "カレンダーを削除しました。"
-                                                    })
-            else
-                ins = Calendar.find_by(:id => params[:calendarId])
-                ens = UserCalendarRelation.find_by(:calendar_id => params[:calendarId], :user_id => @user.id)
-                if ins.destroy && ens.destroy
-                    render :json => JSON.pretty_generate({
-                                                        :status => 'SUCCESS',
-                                                        :api_version => 'v1',
-                                                        :mes => "カレンダーを削除しました。"
-                                                        })
-                else
-                    render :json => JSON.pretty_generate({
-                                                        :status => 'Error',
-                                                        :api_version => 'v1',
-                                                        :mes => 'カレンダーの削除に失敗しました。'
-                    
-                                                        })
-                end
-            end
-        else
-            mes = 'セッション切れです'
-            if check <= 1
-                mes = "最低でも一個のカレンダーがなければなりません。"
-            end
-            render :json => JSON.pretty_generate({
-                                                  :status => 'Error',
-                                                  :api_version => 'v1',
-                                                  :mes => mes
-              
-                                                  })
-        end
-    end
-  private
-    def create_calendar_params
-      base_worker = BaseWorker.new
-      return({
-        :key => base_worker.get_key,
-        :name => params[:name],
-        :description => params[:description],
-        :shareBool => params[:shareBool],
-        :cloneBool => params[:cloneBool],
-        :author_id => @user.id
+
+  def update
+    errorJson = RenderErrorJson.new()
+    if @calendar.update(update_calendar_params)
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "カレンダーを変更しました。"
       })
+    else
+      render json: errorJson.createError(code:'AE_0011',api_version:'v1')
     end
+  end
+
+  def destroy
+    errorJson = RenderErrorJson.new()
+    if @calendar.destroy
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "カレンダーを削除しました。"
+      })
+    else
+      render json: errorJson.createError(code:'AE_0012',api_version:'v1')
+    end
+  end
+
+  private
+  def create_calendar_params
+    base_worker = BaseWorker.new
+    return({
+      :key => base_worker.get_key,
+      :name => params[:name],
+      :description => params[:description],
+      :shareBool => params[:shareBool],
+      :cloneBool => params[:cloneBool],
+      :author_id => @user.id
+    })
+  end
+
+  def update_calendar_params
+    base_worker = BaseWorker.new
+    return({
+      :name => params[:name],
+      :description => params[:description],
+      :color => params[:color],
+      :shareBool => params[:shareBool],
+      :cloneBool => params[:cloneBool]
+    })
+  end
 end

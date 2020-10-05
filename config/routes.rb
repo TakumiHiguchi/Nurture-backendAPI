@@ -22,6 +22,7 @@ Rails.application.routes.draw do
             get 'calendar_search' => 'calendar_share#search'
             post 'calendar_clone' => 'calendar_share#clone'
             post 'calendar_follow' => 'calendar_share#follow'
+            delete 'calendar_destroy_follow' => 'calendar_share#destroy_follow'
 
             resources :user, :only => [:update]
             resources :canceled_lecture, :only => [:index,:create,:update]

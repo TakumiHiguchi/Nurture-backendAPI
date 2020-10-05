@@ -1,6 +1,6 @@
 # N:urture backendAPI
 
-N:urtureのbackendAPIです。頑張ってリファクタリングしていますが、コードはかなり汚いと思います。
+N:urtureのbackendAPIです。頑張ってリファクタリングしていますが、コードは汚いと思います。
 
 ## 注意
 - dockerが使える環境はご自身でご用意してください。
@@ -21,5 +21,5 @@ N:urtureのbackendAPIです。頑張ってリファクタリングしていま�
   $ docker-compose up
   ```
 
-4. N:urture（frontend）を起動しましょう
-  [https://github.com/TakumiHiguchi/Nurture-front](url)を見て頑張ってください。
+4. N:urture（frontend）を起動しましょう。
+  [https://github.com/TakumiHiguchi/Nurture-front](url)を見て頑張ってください

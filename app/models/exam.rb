@@ -36,20 +36,13 @@ class Exam < ApplicationRecord
     return examResult
   end
 
-  def self.clone(cal_id, newcal_id)
-    exams = Exam.where(:calendar_id => cal_id)
-    bl = true
-    exams.each do |exam|
-      if bl
-        bl = Exam.create(
-          :calendar_id => newcal_id, 
-          :title => exam.title, 
-          :content => exam.content, 
-          :examDate => exam.examDate, 
-          :position => exam.position
-        )
-      end
-    end
-    return bl
+  def clone(newcalender_id)
+    Exam.create(
+      :calendar_id => newcalender_id, 
+      :title => self.title, 
+      :content => self.content, 
+      :examDate => self.examDate, 
+      :position => self.position
+    )
   end
 end

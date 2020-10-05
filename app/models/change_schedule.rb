@@ -6,33 +6,25 @@ class ChangeSchedule < ApplicationRecord
   belongs_to :schedule
   belongs_to :calendar
     
-    
-  def self.check_and_create(cal_id, schedule_id, beforeDate, afterDate, position)
-    #日付を加工する
-    beforeDate.gsub!("/","-")
-    afterDate.gsub!("/","-")
-  
-    #すでに移動済みかのチェック
-    check = ChangeSchedule.where(:calendar_id => cal_id, :schedule_id => schedule_id, :beforeDate => beforeDate)
-    check1 = ChangeSchedule.where(:calendar_id => cal_id,:afterDate => afterDate, :position => position)
-
-    if check.length > 0
-			result = nil
-			mes = "授業は既に移動されています。"
-			return result,mes
-		elsif check1.length > 0
-			result = nil
-			mes = "移動先には授業変更が既に登録されています。"
-			return result,mes
+	def self.uniq_create(props)
+		errorJson = RenderErrorJson.new()
+		#日付を加工する
+    props[:before].gsub!("/","-")
+    props[:after].gsub!("/","-")
+		check = self
+			.where(:schedule_id => props[:schedule_id], :beforeDate => props[:before])
+			.or(where(:position => props[:position], :afterDate => props[:after]))
+		if check.blank?
+			return(
+				self.create(
+					:schedule_id => props[:schedule_id], 
+					:beforeDate => props[:before], 
+					:afterDate => props[:after], 
+					:position => props[:position]
+				)
+			)
 		else
-			result = self.create(:calendar_id => cal_id, :schedule_id => schedule_id, :beforeDate => beforeDate, :afterDate => afterDate, :position => position)
-			result = result.save
-			if result
-				mes = "授業の移動を作成しました"
-			else
-				mes = "授業の移動に失敗しました"
-			end
-			return result,mes
+			return nil
 		end
 	end
 	
@@ -78,20 +70,13 @@ class ChangeSchedule < ApplicationRecord
 		return change_schedules_before,change_schedules_after
 	end
 	
-    def self.clone(cal_id, newcal_id)
-        css = ChangeSchedule.where(:calendar_id => cal_id)
-        bl = true
-        css.each do |cs|
-            if bl
-                bl = ChangeSchedule.create(
-                    :calendar_id => newcal_id, 
-                    :schedule_id => cs.schedule_id, 
-                    :beforeDate => cs.beforeDate, 
-                    :afterDate => cs.afterDate, 
-                    :position => cs.position
-                )
-            end
-        end
-        return bl
-    end
+	def clone(newcalendar_id)
+		ChangeSchedule.create(
+			:calendar_id => newcalendar_id, 
+			:schedule_id => self.schedule_id, 
+			:beforeDate => self.beforeDate, 
+			:afterDate => self.afterDate, 
+			:position => self.position
+		)
+  end
 end
