@@ -13,15 +13,22 @@ class Api::V1::ScheduleController < ApplicationController
 
   def create
     errorJson = RenderErrorJson.new()
-    schedule = Schedule.create(create_params)
-    if schedule.save
-      render :json => JSON.pretty_generate({
-        :status => 'SUCCESS',
-        :api_version => 'v1',
-        :mes => '授業を作成しました',
-      })
+
+    #複数のカラムの一意性のチェック（modelのバリデーションでは複数のカラムの一意性ができなかったため）
+    check = Schedule.find_by(:title => params[:title], :teacher => params[:teacher], :semester => params[:semester], :position => params[:position], :grade => params[:grade])
+    if check.nil?
+      schedule = Schedule.create(create_params)
+      if schedule.save
+        render :json => JSON.pretty_generate({
+          :status => 'SUCCESS',
+          :api_version => 'v1',
+          :mes => '授業を作成しました',
+        })
+      else
+        render json: errorJson.createError(code:'AE_0035',api_version:'v1')
+      end
     else
-      render json: errorJson.createError(code:'AE_0035',api_version:'v1')
+      render json: errorJson.createError(code:'AE_0036',api_version:'v1')
     end
   end
 

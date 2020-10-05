@@ -1,34 +1,19 @@
 class Api::V1::SettingController < ApplicationController
-    
-    def setGrade
-        #sessionの確認
-        user = User.find_by(:key => params[:key],:session => params[:session])
-        userSession = user.maxAge.to_i > Time.now.to_i if user
-        
-        if userSession && !params[:grade].nil?
-            userDetail = UserDetail.find_by(:user_id => user.id)
-            userDetail.grade = params[:grade]
-            result = userDetail.save
-            mes = "学年を更新しました。"
-        else
-            result = false
-            mes = "セッションが無効です"
-        end
-        
-        if result
-            render :json => JSON.pretty_generate({
-                                              :status => 'SUCCESS',
-                                              :api_version => 'v1',
-                                              :mes => mes
-            })
-        else
-            render :json => JSON.pretty_generate({
-                                              :status => 'ERROR',
-                                              :api_version => 'v1',
-                                              :mes => mes
-            })
-        end
-    end
+  before_action :userSignedin?, :only => [:setGrade, :setSemesterDate] #セッションの確認
+  before_action :calendarOwn?, :only => [:setSemesterDate] #カレンダーの所有者か確認
+	def setGrade
+		errorJson = RenderErrorJson.new()
+		@user.user_detail.update(:grade => params[:grade])
+		if @user.save
+			render :json => JSON.pretty_generate({
+				:status => 'SUCCESS',
+				:api_version => 'v1',
+				:mes => '学年を更新しました'
+			})
+		else
+			render json: errorJson.createError(code:'AE_0100',api_version:'v1')
+		end
+	end
     
     def setSemesterDate
         #sessionの確認

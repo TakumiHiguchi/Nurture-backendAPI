@@ -1,6 +1,5 @@
 class Schedule < ApplicationRecord
   #バリデーション
-  validates :site_id,     uniquness: { scope: [:title, :teacher, :semester, :position, :grade]  }
   validates :title,       :presence => true, :length => { :in => 1..150 }
   validates :CoNum,                          :length => { :in => 0..100 }
   validates :teacher,     :presence => true, :length => { :in => 1..30 }
