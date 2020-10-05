@@ -20,8 +20,10 @@ class RenderErrorJson
         error_base[:mes] = 'カレンダーをうまくコピーできませんでした'
       when 'AE_0014'
         error_base[:mes] = 'カレンダーをうまくフォローできませんでした'
-      when 'AE_0014'
+      when 'AE_0015'
         error_base[:mes] = 'カレンダーをうまくアンフォローできませんでした'
+      when 'AE_0020'
+        error_base[:mes] = '休講をうまく登録できませんでした。'
     end
     return JSON.pretty_generate(error_base)
   end
