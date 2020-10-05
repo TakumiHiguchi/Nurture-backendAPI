@@ -23,22 +23,15 @@ class Api::V1::ChangeScheduleController < ApplicationController
   end
 
   def destroy
-      if @userSession && @calendarOwn
-        ins = ChangeSchedule.find_by(:calendar_id => params[:calendarId], :id => params[:change_schedule_id])
-        if ins.destroy
-            render :json => JSON.pretty_generate({
-                                              :status => 'SUCCESS',
-                                              :api_version => 'v1',
-                                              :mes => "授業変更を削除しました。"
-                                              })
-        else
-            render :json => JSON.pretty_generate({
-                                                :status => 'Error',
-                                                :api_version => 'v1',
-                                                :mes => '授業変更の削除に失敗しました。'
-            
-                                                })
-        end
-      end
+    chenge_schedule = @calendar.change_schedules.find(params[:change_schedule_id])
+    if chenge_schedule.destroy
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "授業変更を削除しました。"
+      })
+    else
+      render json: errorJson.createError(code:'AE_0026',api_version:'v1')
+    end
   end
 end
