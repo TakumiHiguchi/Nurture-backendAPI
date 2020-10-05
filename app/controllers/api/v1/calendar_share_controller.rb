@@ -24,25 +24,20 @@ class Api::V1::CalendarShareController < ApplicationController
       render json: errorJson.createError(code:'AE_0013',api_version:'v1')
     end
   end
-    def follow
-        if @userSession
-            ins = Calendar.find_by(:id => params[:calendarId])
-            if ins.shareBool
-                UserCalendarRelation.create(:user_id => @user.id, :calendar_id => params[:calendarId])
-                render :json => JSON.pretty_generate({
-                                                  :status => 'SUCCESS',
-                                                  :api_version => 'v1',
-                                                  :mes => "カレンダーをフォローしました"
-                })
-            else
-                render :json => JSON.pretty_generate({
-                                                  :status => 'ERROR',
-                                                  :api_version => 'v1',
-                                                  :mes => "フォローが許可されていません。"
-                })
-            end
-        end
+
+  def follow
+    @calendar = Calendar.share_only.find(params[:calendarId])
+    if @calendar.present?
+      UserCalendarRelation.create(:user_id => @user.id, :calendar_id => params[:calendarId])
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "カレンダーをフォローしました"
+      })
+    else
+      render json: errorJson.createError(code:'AE_0014',api_version:'v1')
     end
+  end
     # follow deleteするメソッドを作る
     #フロントも変更
 
