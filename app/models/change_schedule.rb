@@ -70,20 +70,13 @@ class ChangeSchedule < ApplicationRecord
 		return change_schedules_before,change_schedules_after
 	end
 	
-    def self.clone(cal_id, newcal_id)
-        css = ChangeSchedule.where(:calendar_id => cal_id)
-        bl = true
-        css.each do |cs|
-            if bl
-                bl = ChangeSchedule.create(
-                    :calendar_id => newcal_id, 
-                    :schedule_id => cs.schedule_id, 
-                    :beforeDate => cs.beforeDate, 
-                    :afterDate => cs.afterDate, 
-                    :position => cs.position
-                )
-            end
-        end
-        return bl
-    end
+	def clone(newcalendar_id)
+		ChangeSchedule.create(
+			:calendar_id => newcal_id, 
+			:schedule_id => cs.schedule_id, 
+			:beforeDate => cs.beforeDate, 
+			:afterDate => cs.afterDate, 
+			:position => cs.position
+		)
+  end
 end
