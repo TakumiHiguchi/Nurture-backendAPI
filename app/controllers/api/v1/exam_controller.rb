@@ -1,6 +1,6 @@
 class Api::V1::ExamController < ApplicationController
-    before_action :userSignedin?, :only => [:create,:update,:destroy] #セッションの確認
-    before_action :calendarOwn?, :only => [:create, :update, :destroy] #カレンダーの所有者か確認
+  before_action :userSignedin?, :only => [:create,:update,:destroy] #セッションの確認
+  before_action :calendarOwn?, :only => [:create, :update, :destroy] #カレンダーの所有者か確認
 
   def create
     errorJson = RenderErrorJson.new()
@@ -35,27 +35,20 @@ class Api::V1::ExamController < ApplicationController
       render json: errorJson.createError(code:'AE_0031',api_version:'v1')
     end
   end
-  
-    def destroy
-        if @userSession && @calendarOwn
-        #sessionが有効だったらタスクを作る
-          ins = Exam.find_by(:calendar_id => params[:calendarId], :id => params[:exam_id])
-          if ins.destroy
-              render :json => JSON.pretty_generate({
-                                                :status => 'SUCCESS',
-                                                :api_version => 'v1',
-                                                :mes => "試験を削除しました。"
-                                                })
-          else
-              render :json => JSON.pretty_generate({
-                                                  :status => 'Error',
-                                                  :api_version => 'v1',
-                                                  :mes => '試験の削除に失敗しました。'
-              
-                                                  })
-          end
-        end
+
+  def destroy
+    errorJson = RenderErrorJson.new()
+    exam = @calendar.exams.find(params[:exam_id])
+    if exam.delete
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "試験を削除しました。"
+      })
+    else
+      render json: errorJson.createError(code:'AE_0032',api_version:'v1')
     end
+  end
   
   private
   def update_params

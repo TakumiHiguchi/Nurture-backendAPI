@@ -37,7 +37,7 @@ class Exam < ApplicationRecord
       :date => self.examDate,
       :position => self.position,
       :complete => self.complete,
-      :label => "タスク"
+      :label => "試験"
     }
     examResult[self.examDate.strftime("%Y").to_i][self.examDate.strftime("%m").to_i][self.examDate.strftime("%d").to_i].push(ins)
     return examResult
