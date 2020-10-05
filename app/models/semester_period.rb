@@ -9,21 +9,14 @@ class SemesterPeriod < ApplicationRecord
   #アソシエーション
   belongs_to :calendar
 
-  def self.clone(cal_id, newcal_id)
-    periods = SemesterPeriod.where(:calendar_id => cal_id)
-    bl = true
-    periods.each do |period|
-      if bl
-        bl = SemesterPeriod.create(
-          :calendar_id => newcal_id,
-          :grade => period.grade,
-          :fh_semester_f => period.fh_semester_f, 
-          :fh_semester_s => period.fh_semester_s, 
-          :late_semester_f => period.late_semester_f, 
-          :late_semester_s => period.late_semester_s
-        )
-      end
-    end
-    return bl
+  def clone(newcalendar_id)
+    SemesterPeriod.create(
+      :calendar_id => newcalendar_id,
+      :grade => self.grade,
+      :fh_semester_f => self.fh_semester_f, 
+      :fh_semester_s => self.fh_semester_s, 
+      :late_semester_f => self.late_semester_f, 
+      :late_semester_s => self.late_semester_s
+    )
   end
 end

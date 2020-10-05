@@ -121,8 +121,8 @@ class Calendar < ApplicationRecord
       self.tasks.each{ |task| task.clone(new_calendar.id) }
       self.exams.each{ |exam| exam.clone(new_calendar.id) }
       self.change_schedules.each{ |change_schedule| change_schedule.clone(new_calendar.id) }
-      self.calendar_schedule_relation.each{ |calendar_schedule| calendar_schedule.clone(new_calendar.id) }
-      SemesterPeriod.clone(self.id, new_calendar.id)
+      self.calendar_schedule_relations.each{ |calendar_schedule| calendar_schedule.clone(new_calendar.id) }
+      self.semester_periods.each{ |semester_period| semester_period.clone(new_calendar.id) }
       TransferSchedule.clone(self.id, new_calendar.id)
     else
       render json: errorJson.createError(code:'AE_0010',api_version:'v1')
