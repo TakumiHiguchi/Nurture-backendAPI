@@ -27,34 +27,6 @@ class ChangeSchedule < ApplicationRecord
 			return nil
 		end
 	end
-
-	def self.check_and_create(cal_id, schedule_id, beforeDate, afterDate, position)
-		#消す
-    
-  
-    #すでに移動済みかのチェック
-    check = ChangeSchedule.where(:calendar_id => cal_id, )
-    check1 = ChangeSchedule.where(:calendar_id => cal_id,:afterDate => afterDate, :position => position)
-
-    if check.length > 0
-			result = nil
-			mes = "授業は既に移動されています。"
-			return result,mes
-		elsif check1.length > 0
-			result = nil
-			mes = "移動先には授業変更が既に登録されています。"
-			return result,mes
-		else
-			result = self.create(:calendar_id => cal_id, :schedule_id => schedule_id, :beforeDate => beforeDate, :afterDate => afterDate, :position => position)
-			result = result.save
-			if result
-				mes = "授業の移動を作成しました"
-			else
-				mes = "授業の移動に失敗しました"
-			end
-			return result,mes
-		end
-	end
 	
 	#カレンダーIDから授業変更を取得して、配列に格納する関数
 	def createDatekeyArrayOfChangeSchedule(change_schedules_before, change_schedules_after, calendar_id)
