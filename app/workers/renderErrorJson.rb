@@ -28,6 +28,10 @@ class RenderErrorJson
         error_base[:mes] = '授業変更をうまく登録できませんでした。'
       when 'AE_0026'
         error_base[:mes] = '授業変更をうまく削除できませんでした。'
+      when 'AE_0030'
+        error_base[:mes] = '試験をうまく作成できませんでした。'
+      when 'AE_0031'
+        error_base[:mes] = '試験をうまく更新できませんでした。'
     end
     return JSON.pretty_generate(error_base)
   end
