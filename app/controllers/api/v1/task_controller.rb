@@ -31,31 +31,17 @@ class Api::V1::TaskController < ApplicationController
   end
 
   def destroy
-      if @userSession && @calendarOwn
-      #sessionが有効だったらタスクを作る
-        ins = Task.find_by(:calendar_id => params[:calendarId],:id => params[:task_id])
-        if ins.destroy
-            render :json => JSON.pretty_generate({
-                                              :status => 'SUCCESS',
-                                              :api_version => 'v1',
-                                              :mes => "タスクを削除しました。"
-                                              })
-        else
-            render :json => JSON.pretty_generate({
-                                                :status => 'Error',
-                                                :api_version => 'v1',
-                                                :mes => 'タスクの削除に失敗しました。'
-            
-                                                })
-        end
-      else
-          render :json => JSON.pretty_generate({
-                                                :status => 'Error',
-                                                :api_version => 'v1',
-                                                :mes => 'セッション切れ'
-            
-                                                })
-      end
+    task = @calendar.tasks.find(params[:task_id])
+    if task.destroy
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "タスクを削除しました。"
+      })
+    else
+      errorJson = RenderErrorJson.new()
+      render json: errorJson.createError(code:'AE_0042',api_version:'v1')
+    end
   end
 
   private
