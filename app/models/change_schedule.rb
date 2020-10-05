@@ -72,11 +72,11 @@ class ChangeSchedule < ApplicationRecord
 	
 	def clone(newcalendar_id)
 		ChangeSchedule.create(
-			:calendar_id => newcal_id, 
-			:schedule_id => cs.schedule_id, 
-			:beforeDate => cs.beforeDate, 
-			:afterDate => cs.afterDate, 
-			:position => cs.position
+			:calendar_id => newcalendar_id, 
+			:schedule_id => self.schedule_id, 
+			:beforeDate => self.beforeDate, 
+			:afterDate => self.afterDate, 
+			:position => self.position
 		)
   end
 end
