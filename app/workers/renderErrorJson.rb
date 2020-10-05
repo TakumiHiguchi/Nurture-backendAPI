@@ -38,9 +38,13 @@ class RenderErrorJson
         error_base[:mes] = 'スケジュールをうまく作成できませんでした'
       when 'AE_0036'
         error_base[:mes] = 'すでにそのスケジュールは登録されています'
+      when 'AE_0040'
+        error_base[:mes] = 'タスクをうまく登録できませんでした'
+      when 'AE_0040'
+        error_base[:mes] = 'タスクをうまく更新できませんでした'
       when 'AE_0100'
         error_base[:mes] = '学年が登録できませんでした'
-      when 'AE_0100'
+      when 'AE_0101'
         error_base[:mes] = '学期の期間が登録できませんでした'
     end
     return JSON.pretty_generate(error_base)
