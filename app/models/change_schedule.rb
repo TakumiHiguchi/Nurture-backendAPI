@@ -6,14 +6,34 @@ class ChangeSchedule < ApplicationRecord
   belongs_to :schedule
   belongs_to :calendar
     
+	def self.uniq_create(props)
+		errorJson = RenderErrorJson.new()
+		#日付を加工する
+    props[:before].gsub!("/","-")
+    props[:after].gsub!("/","-")
+		check = self
+			.where(:schedule_id => props[:schedule_id], :beforeDate => props[:before])
+			.or(where(:position => props[:position], :afterDate => props[:after]))
+		if check.blank?
+			return(
+				self.create(
+					:schedule_id => props[:schedule_id], 
+					:beforeDate => props[:before], 
+					:afterDate => props[:after], 
+					:position => props[:position]
+				)
+			)
+		else
+			return nil
+		end
+	end
+
+	def self.check_and_create(cal_id, schedule_id, beforeDate, afterDate, position)
+		#消す
     
-  def self.check_and_create(cal_id, schedule_id, beforeDate, afterDate, position)
-    #日付を加工する
-    beforeDate.gsub!("/","-")
-    afterDate.gsub!("/","-")
   
     #すでに移動済みかのチェック
-    check = ChangeSchedule.where(:calendar_id => cal_id, :schedule_id => schedule_id, :beforeDate => beforeDate)
+    check = ChangeSchedule.where(:calendar_id => cal_id, )
     check1 = ChangeSchedule.where(:calendar_id => cal_id,:afterDate => afterDate, :position => position)
 
     if check.length > 0

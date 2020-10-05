@@ -24,6 +24,10 @@ class RenderErrorJson
         error_base[:mes] = 'カレンダーをうまくアンフォローできませんでした'
       when 'AE_0020'
         error_base[:mes] = '休講をうまく登録できませんでした。'
+      when 'AE_0025'
+        error_base[:mes] = '授業変更をうまく登録できませんでした。'
+      when 'AE_0026'
+        error_base[:mes] = 'すでに授業変更が登録されているため登録できません'
     end
     return JSON.pretty_generate(error_base)
   end
