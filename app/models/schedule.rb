@@ -35,7 +35,20 @@ class Schedule < ApplicationRecord
     end
     return schedule
   end
-  
+
+  def create_schedule_hash
+    return({
+      :id => self.id,
+      :title => self.title,
+      :CoNum => self.CoNum,
+      :teacher => self.teacher,
+      :semester => self.semester,
+      :position => self.position,
+      :grade => self.grade,
+      :status => self.status
+    })
+  end
+
   def self.searchAPI(type,params)
       return self.all unless params.to_s.length > 0
 
