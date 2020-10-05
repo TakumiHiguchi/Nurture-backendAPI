@@ -4,10 +4,10 @@ Rails.application.routes.draw do
             resources :schedule, :only => [:index,:create]
             resources :user_schedule, :only => [:index,:create,:update]
             delete 'user_schedule' => 'user_schedule#destroy'
-            resources :task ,:only => [:index,:create,:update]
+            resources :task ,:only => [:create,:update]
             delete 'task' => 'task#destroy'
             delete 'exam' => 'exam#destroy'
-            resources :exam ,:only => [:index,:create,:update]
+            resources :exam ,:only => [:create,:update]
             delete 'change_schedule' => 'change_schedule#destroy'
             resources :change_schedule ,:only => [:index,:create]
             resources :news, :only => [:index]

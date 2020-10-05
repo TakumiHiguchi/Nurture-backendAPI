@@ -9,7 +9,7 @@ GOOGLE_OPENID_CONFIGURATION_HOST = "https://accounts.google.com/.well-known/open
 #タイムアウト秒数
 TIMEOUT = 5
 class GoogleConfiguration
-    def userData(token)
+    def get_user_data(token)
         aud = ['653992313170-okt2tfmukp5eg4s4g8fiaf6u3261a0ov.apps.googleusercontent.com']
         iss = ['accounts.google.com']
         

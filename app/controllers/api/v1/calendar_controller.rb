@@ -14,7 +14,6 @@ class Api::V1::CalendarController < ApplicationController
   def create    
     errorJson = RenderErrorJson.new()
     @user.calendars.build(create_calendar_params)
-
     if @user.save
       render :json => JSON.pretty_generate({
         :status => 'SUCCESS',
@@ -66,7 +65,6 @@ class Api::V1::CalendarController < ApplicationController
   end
 
   def update_calendar_params
-    base_worker = BaseWorker.new
     return({
       :name => params[:name],
       :description => params[:description],

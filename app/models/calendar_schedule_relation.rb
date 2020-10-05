@@ -1,32 +1,31 @@
 class CalendarScheduleRelation < ApplicationRecord
-    #バリデーション
-    validates :schedule_id, :presence => true
-    validates :calendar_id, :presence => true
+  #バリデーション
+  validates :schedule_id, :presence => true
+  validates :calendar_id, :presence => true
 
-    #アソシエーション
-    belongs_to :calendar
-    belongs_to :schedule
-    
-    def self.exists_and_create(calendar_id, sc, user_grade)
-        if sc
-            #スケジュールがある場合
-            reSc = Calendar.joins(:schedules).select("calendars.*, schedules.*, calendar_schedule_relations.reges_grade").where("calendars.id = ?", calendar_id).where("schedules.position = ?", sc.position).where("schedules.semester = ?", sc.semester).where("calendar_schedule_relations.reges_grade = ?", user_grade)
-            if reSc.length > 0
-                return nil,false,"既に登録されています。"
-            else
-                return self.create(:schedule_id => sc.id, :calendar_id => calendar_id, :reges_grade => user_grade),true,"スケジュールの登録が完了しました。"
-            end
-        else
-            #スケジュールがなかった場合の処理
-            return nil,false,"スケジュールがありませんでした。"
-        end
+  #アソシエーション
+  belongs_to :calendar
+  belongs_to :schedule
+  
+  def self.uniq_create(props)
+    if props[:schedule].present?
+      if self.find_by(:schedule_id => props[:schedule].id, :calendar_id => props[:calendarId], :reges_grade => props[:user_grade]).nil?
+        self.create(
+          :schedule_id => props[:schedule].id,
+          :calendar_id => props[:calendar_id],
+          :reges_grade => props[:reges_grade]
+        )
+        return true
+      end
     end
+    return false
+  end
 
-    def clone(newcalendar_id)
-      CalendarScheduleRelation.create(
-        :schedule_id => self.schedule_id, 
-        :calendar_id => newcalendar_id, 
-        :reges_grade => self.reges_grade
-      )
-    end
+  def clone(newcalendar_id)
+    CalendarScheduleRelation.create(
+      :schedule_id => self.schedule_id, 
+      :calendar_id => newcalendar_id, 
+      :reges_grade => self.reges_grade
+    )
+  end
 end

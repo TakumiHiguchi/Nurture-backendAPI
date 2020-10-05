@@ -8,14 +8,21 @@ class Exam < ApplicationRecord
   #アソシエーション
   belongs_to :calendar
 
-  def self.check_and_create(cal_id, title, content, examDate, position)
-    check = Exam.where(:calendar_id => cal_id, :examDate => examDate, :position => position)
-    if check.length > 0
-      return nil,"試験が既に存在するため、作成に失敗しました。"
-    else
-      result = self.create(:calendar_id => cal_id, :title => title, :content => content, :examDate => examDate, :position => position)
-      return result.save,"試験を作成しました"
-    end
+  def self.uniq_create(props)
+    errorJson = RenderErrorJson.new()
+		check = self.find_by(:examDate => props[:examdate], :position => props[:position])
+		if check.blank?
+			return(
+				self.create(
+          :title => props[:title],
+          :content => props[:content],
+          :examDate => props[:examdate],
+          :position => props[:position]
+				)
+			)
+		else
+			return nil
+		end
   end
 
   #Examを取得して、配列に格納する
@@ -30,7 +37,7 @@ class Exam < ApplicationRecord
       :date => self.examDate,
       :position => self.position,
       :complete => self.complete,
-      :label => "タスク"
+      :label => "試験"
     }
     examResult[self.examDate.strftime("%Y").to_i][self.examDate.strftime("%m").to_i][self.examDate.strftime("%d").to_i].push(ins)
     return examResult
