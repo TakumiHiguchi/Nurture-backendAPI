@@ -18,29 +18,21 @@ class TransferSchedule < ApplicationRecord
     return transfer_schedules_before, transfer_schedules_after
   end
 
-  def self.check_and_create(cal_id, beforeDate, afterDate)
-      #日付を加工する
-      beforeDate.gsub!("/","-")
-      afterDate.gsub!("/","-")
-      
-      #すでに移動済みかのチェック
-      check = TransferSchedule.where(:calendar_id => cal_id, :beforeDate => beforeDate)
-      
-      if check.length > 0
-          result = nil
-          mes = "振替は既にされています。"
-          return result,mes
-      else
-          result = self.create(:calendar_id => cal_id, :beforeDate => beforeDate, :afterDate => afterDate)
-          result = result.save
-          if result
-              mes = "振替を作成しました"
-          else
-              mes = "振替の作成に失敗しました"
-          end
-          return result,mes
-      end
+  def self.uniq_create(props)
+    #日付を加工する
+    props[:before].gsub!("/","-")
+    props[:after].gsub!("/","-")
+
+    if self.find_by(:beforeDate => props[:before])
+      self.create(
+        :beforeDate => props[:before],
+        :afterDate => props[:after]
+      )
+    else
+      return nil
+    end
   end
+
   def clone(newcalendar_id)
     TransferSchedule.create(
       :calendar_id => newcalendar_id, 
