@@ -24,38 +24,7 @@ class Api::V1::UserController < ApplicationController
       render json: errorJson.createError(code:'AE_0037',api_version:'v1')
     end
   end
-  
-  def loadUserDetail
-      #sessionの確認
-      user = User.find_by(:key => params[:key],:session => params[:session])
-      userSession = user.maxAge.to_i > Time.now.to_i if user
-      
-      if userSession
-          #sessionが有効だったらユーザーのスケジュールを返す
-          userDetail = UserDetail.new
-          result_schedule, mes = userDetail.setSchedule(user.id)
-          
-          
-      else
-          result_schedule = false
-          mes = "セッションが無効です"
-      end
-      
-      if result_schedule
-          render :json => JSON.pretty_generate({
-                                            :status => 'SUCCESS',
-                                            :api_version => 'v1',
-                                            :mes => mes,
-                                            :schedules => result_schedule
-          })
-      else
-          render :json => JSON.pretty_generate({
-                                            :status => 'ERROR',
-                                            :api_version => 'v1',
-                                            :mes => mes
-          })
-      end
-  end
+
   def update
       if @userSession
           userDetail = UserDetail.find_by(:user_id => @user.id)
