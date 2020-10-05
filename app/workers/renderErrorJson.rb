@@ -34,6 +34,8 @@ class RenderErrorJson
         error_base[:mes] = '試験をうまく作成できませんでした。'
       when 'AE_0031'
         error_base[:mes] = '試験をうまく更新できませんでした。'
+      when 'AE_0035'
+        error_base[:mes] = 'スケジュールをうまく作成できませんでした。'
     end
     return JSON.pretty_generate(error_base)
   end
