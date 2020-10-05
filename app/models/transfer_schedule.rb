@@ -41,18 +41,11 @@ class TransferSchedule < ApplicationRecord
           return result,mes
       end
   end
-  def self.clone(cal_id, newcal_id)
-      csrs = TransferSchedule.where(:calendar_id => cal_id)
-      bl = true
-      csrs.each do |csr|
-          if bl
-              bl = TransferSchedule.create(
-                      :calendar_id => newcal_id, 
-                      :beforeDate => csr.beforeDate,
-                      :afterDate => csr.afterDate
-                  )
-          end
-      end
-      return bl
+  def clone(newcalendar_id)
+    TransferSchedule.create(
+      :calendar_id => newcalendar_id, 
+      :beforeDate => self.beforeDate,
+      :afterDate => self.afterDate
+    )
   end
 end
