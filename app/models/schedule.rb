@@ -1,4 +1,15 @@
 class Schedule < ApplicationRecord
+  # スキーマ
+  # title(string)
+  # CoNum(string)
+  # teacher(string)
+  # semester(string)
+  # position(integer)
+  # grade(integer)                                        :default => 1
+  # status(string)
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
+
   #バリデーション
   validates :title,       :presence => true, :length => { :in => 1..150 }
   validates :CoNum,                          :length => { :in => 0..100 }
