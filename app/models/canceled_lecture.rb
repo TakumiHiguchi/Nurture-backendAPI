@@ -1,4 +1,12 @@
 class CanceledLecture < ApplicationRecord
+  # スキーマ
+  # calendar_id(integer)
+  # clDate(date)
+  # grade(integer)
+  # position(integer)
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
+  
   def self.loadCL(cal_id)
     ins = self.where(:calendar_id => cal_id)
     result = []
