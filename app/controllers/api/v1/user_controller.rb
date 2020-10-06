@@ -26,22 +26,17 @@ class Api::V1::UserController < ApplicationController
   end
 
   def update
-      if @userSession
-          userDetail = UserDetail.find_by(:user_id => @user.id)
-          result = userDetail.update(:name => params[:name])
-          if result
-              render :json => JSON.pretty_generate({
-                                                :status => 'SUCCESS',
-                                                :api_version => 'v1',
-                                                :mes => "ユーザーを更新しました"
-              })
-          else
-              render :json => JSON.pretty_generate({
-                                                :status => 'ERROR',
-                                                :api_version => 'v1',
-                                                :mes => "ユーザーの更新に失敗しました"
-              })
-          end
-      end
+    # 後々setting_controllerのメソッドと結合？
+    # フロント側と様子見ながら
+    if @user.user_detail.update(:name => params[:name])
+      render :json => JSON.pretty_generate({
+        :status => 'SUCCESS',
+        :api_version => 'v1',
+        :mes => "ユーザーを更新しました"
+      })
+    else
+      errorJson = RenderErrorJson.new()
+      render json: errorJson.createError(code:'AE_0102',api_version:'v1')
+    end
   end
 end

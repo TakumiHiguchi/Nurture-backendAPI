@@ -50,6 +50,8 @@ class RenderErrorJson
         error_base[:mes] = '学年が登録できませんでした'
       when 'AE_0101'
         error_base[:mes] = '学期の期間が登録できませんでした'
+      when 'AE_0102'
+        error_base[:mes] = '名前が登録できませんでした'
     end
     return JSON.pretty_generate(error_base)
   end
