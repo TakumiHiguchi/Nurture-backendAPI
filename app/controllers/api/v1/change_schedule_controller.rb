@@ -18,7 +18,7 @@ class Api::V1::ChangeScheduleController < ApplicationController
         :mes => '授業の移動を作成しました',
       })
     else
-      render json: errorJson.createError(code:'AE_0025',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0025', api_version: 'v1')
     end
   end
 
@@ -31,7 +31,7 @@ class Api::V1::ChangeScheduleController < ApplicationController
         :mes => "授業変更を削除しました。"
       })
     else
-      render json: errorJson.createError(code:'AE_0026',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0026', api_version: 'v1')
     end
   end
 end

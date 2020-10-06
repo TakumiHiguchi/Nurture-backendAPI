@@ -21,7 +21,7 @@ class Api::V1::UserController < ApplicationController
       })
     else
       errorJson = RenderErrorJson.new()
-      render json: errorJson.createError(code:'AE_0037',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0037', api_version: 'v1')
     end
   end
 
@@ -36,7 +36,7 @@ class Api::V1::UserController < ApplicationController
       })
     else
       errorJson = RenderErrorJson.new()
-      render json: errorJson.createError(code:'AE_0102',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0102', api_version: 'v1')
     end
   end
 end

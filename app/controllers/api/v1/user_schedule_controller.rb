@@ -11,7 +11,7 @@ class Api::V1::UserScheduleController < ApplicationController
         :mes => "スケジュールを削除しました。"
       })
     else
-      render json: errorJson.createError(code:'AE_0016',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0016', api_version: 'v1')
     end
   end
 end

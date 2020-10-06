@@ -15,7 +15,7 @@ class Api::V1::TransferScheduleController < ApplicationController
       })
     else
       errorJson = RenderErrorJson.new()
-      render json: errorJson.createError(code:'AE_0025',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0025', api_version: 'v1')
     end
   end
 end

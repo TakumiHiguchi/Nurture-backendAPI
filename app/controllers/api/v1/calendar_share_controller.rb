@@ -21,7 +21,7 @@ class Api::V1::CalendarShareController < ApplicationController
         :mes => "カレンダーをコピーしました"
       })
     else
-      render json: errorJson.createError(code:'AE_0013',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0013', api_version: 'v1')
     end
   end
 
@@ -36,7 +36,7 @@ class Api::V1::CalendarShareController < ApplicationController
         :mes => "カレンダーをフォローしました"
       })
     else
-      render json: errorJson.createError(code:'AE_0014',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0014',api_version: 'v1')
     end
   end
 
@@ -51,7 +51,7 @@ class Api::V1::CalendarShareController < ApplicationController
         :mes => "カレンダーをアンフォローしました"
       })
     else
-      render json: errorJson.createError(code:'AE_0015',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0015', api_version: 'v1')
     end
   end
 

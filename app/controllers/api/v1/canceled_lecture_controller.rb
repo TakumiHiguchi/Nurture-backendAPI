@@ -11,7 +11,7 @@ class Api::V1::CanceledLectureController < ApplicationController
         :mes => "休講の予定を作成しました",
       })
     else
-      render json: errorJson.createError(code:'AE_0020',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code:'AE_0020',api_version:'v1')
     end
   end
 
