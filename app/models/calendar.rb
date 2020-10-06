@@ -1,4 +1,15 @@
 class Calendar < ApplicationRecord
+  #スキーマ
+  # name(string)
+  # description(text)
+  # color(string)                          :null => false, :default => "#00aced"
+  # shareBool(boolean)                     :null => false, :default => false
+  # cloneBool(boolean)                     :null => false, :default => false
+  # key(string)
+  # author_id(integer)
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
+
   #バリデーション
   validates :key,         :presence => true, :length => { :in => 1..512 }
   validates :name,        :presence => true, :length => { :in => 1..150 }
