@@ -1,14 +1,21 @@
 class ChangeSchedule < ApplicationRecord
-  #バリデーション
+	# スキーマ
+	# schedule_id(integer)
+	# calendar_id(integer)
+	# beforeDate(date)
+	# afterDate(date)
+	# position(integer)
+
+  # バリデーション
   validates :position,    :presence => true
 
-  #アソシエーション
+  # アソシエーション
   belongs_to :schedule
   belongs_to :calendar
     
 	def self.uniq_create(props)
 		errorJson = RenderErrorJson.new()
-		#日付を加工する
+		# 日付を加工する
     props[:before].gsub!("/","-")
     props[:after].gsub!("/","-")
 		check = self
