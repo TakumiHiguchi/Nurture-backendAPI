@@ -1,4 +1,11 @@
 class User < ApplicationRecord
+  # スキーマ
+  # key(string)
+  # session(string)
+  # maxAge(integer)
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
+
   #バリデーション
   validates :key,        :presence => true, :length => { :maximum => 512 }
 
