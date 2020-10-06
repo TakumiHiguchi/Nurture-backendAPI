@@ -24,6 +24,8 @@ class RenderErrorJson
         error_base[:mes] = 'カレンダーをうまくフォローできませんでした'
       when 'AE_0015'
         error_base[:mes] = 'カレンダーをうまくアンフォローできませんでした'
+      when 'AE_0016'
+        error_base[:mes] = 'カレンダーからスケジュールを削除しました'
       when 'AE_0020'
         error_base[:mes] = '休講をうまく登録できませんでした'
       when 'AE_0025'
