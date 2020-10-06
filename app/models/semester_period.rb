@@ -1,4 +1,14 @@
 class SemesterPeriod < ApplicationRecord
+  # スキーマ
+  # calendar_id(integer)
+  # grade(integer)
+  # fh_semester_f(date)
+  # fh_semester_s(date)
+  # late_semester_f(date)
+  # late_semester_s(date)
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
+
   #バリデーション
   validates :grade,           :presence => true
   validates :fh_semester_f,   :presence => true          

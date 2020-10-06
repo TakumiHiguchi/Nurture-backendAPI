@@ -1,4 +1,14 @@
 class Exam < ApplicationRecord
+  # スキーマ
+  # calendar_id(integer)
+  # title(string)
+  # content(text)
+  # examDate(date)
+  # position(integer)
+  # complete(boolean)                                     :default => false
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
+
   #バリデーション
   validates :title,   :presence => true, :length => { :in => 1..150 }
   validates :content,                 :length => { :in => 0..100000 }

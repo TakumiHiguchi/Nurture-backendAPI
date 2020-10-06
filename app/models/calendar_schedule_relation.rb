@@ -1,4 +1,11 @@
 class CalendarScheduleRelation < ApplicationRecord
+  # schema
+  # schedule_id(integer)
+  # calendar_id(integer)
+  # reges_grade(integer)
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
+
   #バリデーション
   validates :schedule_id, :presence => true
   validates :calendar_id, :presence => true

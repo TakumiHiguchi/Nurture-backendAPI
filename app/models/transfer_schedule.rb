@@ -1,4 +1,10 @@
 class TransferSchedule < ApplicationRecord
+  # スキーマ
+  # calendar_id(integer)
+  # beforeDate(date)
+  # afterDate(date)
+  # created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
 
   #アソシエーション
   belongs_to :calendar

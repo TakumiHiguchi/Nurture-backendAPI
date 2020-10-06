@@ -24,6 +24,8 @@ class RenderErrorJson
         error_base[:mes] = 'カレンダーをうまくフォローできませんでした'
       when 'AE_0015'
         error_base[:mes] = 'カレンダーをうまくアンフォローできませんでした'
+      when 'AE_0016'
+        error_base[:mes] = 'カレンダーからスケジュールを削除しました'
       when 'AE_0020'
         error_base[:mes] = '休講をうまく登録できませんでした'
       when 'AE_0025'
@@ -50,6 +52,8 @@ class RenderErrorJson
         error_base[:mes] = '学年が登録できませんでした'
       when 'AE_0101'
         error_base[:mes] = '学期の期間が登録できませんでした'
+      when 'AE_0102'
+        error_base[:mes] = '名前が登録できませんでした'
     end
     return JSON.pretty_generate(error_base)
   end
