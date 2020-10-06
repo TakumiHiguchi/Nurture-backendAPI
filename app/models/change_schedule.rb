@@ -5,6 +5,8 @@ class ChangeSchedule < ApplicationRecord
 	# beforeDate(date)
 	# afterDate(date)
 	# position(integer)
+	# created_at(datetime)  :precision => 6, :null => false
+  # updated_at(datetime)  :precision => 6, :null => false
 
   # バリデーション
   validates :position,    :presence => true
