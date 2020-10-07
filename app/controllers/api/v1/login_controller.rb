@@ -8,7 +8,7 @@ class Api::V1::LoginController < ApplicationController
         render :json => JSON.pretty_generate(result)
       else
         errorJson = RenderErrorJson.new()
-        render json: errorJson.createError(code:'SE_0001',api_version:'v1')
+        render status: 400, json: errorJson.createError(status: 400, code: 'SE_0001',api_version: 'v1')
       end
     end
   end

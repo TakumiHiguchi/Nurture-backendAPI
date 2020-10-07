@@ -17,7 +17,7 @@ class Schedule < ApplicationRecord
   validates :semester,    :presence => true, :length => { :in => 1..3 }
   validates :position,    :presence => true
   validates :grade,       :presence => true
-  validates :status,                      :length => { :in => 0..100 }
+  validates :status,                         :length => { :in => 0..100 }
 
   #アソシエーション
   has_many :calendar_schedule_relations

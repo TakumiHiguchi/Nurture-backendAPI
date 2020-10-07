@@ -21,7 +21,7 @@ class Api::V1::CalendarController < ApplicationController
         :mes => 'カレンダーを作成しました。'
       })
     else
-      render json: errorJson.createError(code:'AE_0010',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0010', api_version: 'v1')
     end
   end
 
@@ -34,7 +34,7 @@ class Api::V1::CalendarController < ApplicationController
         :mes => "カレンダーを変更しました。"
       })
     else
-      render json: errorJson.createError(code:'AE_0011',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0011', api_version: 'v1')
     end
   end
 
@@ -47,7 +47,7 @@ class Api::V1::CalendarController < ApplicationController
         :mes => "カレンダーを削除しました。"
       })
     else
-      render json: errorJson.createError(code:'AE_0012',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0012', api_version: 'v1')
     end
   end
 

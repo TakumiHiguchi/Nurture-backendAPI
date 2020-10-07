@@ -25,10 +25,10 @@ class Api::V1::ScheduleController < ApplicationController
           :mes => '授業を作成しました',
         })
       else
-        render json: errorJson.createError(code:'AE_0035',api_version:'v1')
+        render status: 400, json: errorJson.createError(status: 400, code: 'AE_0035', api_version: 'v1')
       end
     else
-      render json: errorJson.createError(code:'AE_0036',api_version:'v1')
+      render status: 400, json: errorJson.createError(status: 400, code: 'AE_0036', api_version: 'v1')
     end
   end
 

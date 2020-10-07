@@ -1,7 +1,8 @@
 class RenderErrorJson
   def createError(props)
+    props[:status] ||= 200
     error_base ={
-      status:'ERROR',
+      status: props[:status],
       api_version: props[:api_version],
       error_code: props[:code]
     }
