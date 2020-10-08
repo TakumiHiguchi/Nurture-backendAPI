@@ -13,7 +13,7 @@ class ChangeSchedule < ApplicationRecord
 
   # アソシエーション
   belongs_to :schedule
-  belongs_to :calendar
+  belongs_to :calendar, optional: true
     
 	def self.uniq_create(props)
 		errorJson = RenderErrorJson.new()
