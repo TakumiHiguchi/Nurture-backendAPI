@@ -71,14 +71,8 @@ describe 'scheduleAPI' do
 		end
 
 		context 'ログインしていない時' do
-			before do
-				# APIの使用上CoNumで入ってこないのでnumberで与える
-				# フロントの広範囲のリファクタリングが必要なためフロントをリファクタリングするときに変更する
-				set_schedule_hash[:number] = Faker::Name.name
-			end
-
 			it '401ステータスが帰ってくること' do
-				post '/api/v1/schedule', params: set_schedule_hash
+				post '/api/v1/schedule'
 				expect(response.status).to eq(401)
 			end
 		end
