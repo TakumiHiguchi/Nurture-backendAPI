@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe 'calendarAPI' do
 	let(:create_user){ FactoryBot.create(:user, :with_calendar, :with_user_detail) }
+	let(:create_calendar){ FactoryBot.create(:calendar) }
 	let(:calendar_hash){ FactoryBot.attributes_for(:calendar) }
 
 	describe 'get /api/v1/calendar' do
@@ -66,6 +67,44 @@ describe 'calendarAPI' do
 			end
 		end
 	end
+
+	describe 'patch /api/v1/calendar/:id' do
+		context 'サインインしている時' do
+			before do
+				# keyとsessionを与えてログイン状態にする
+				calendar_hash[:key] = create_user.key
+				calendar_hash[:session] = create_user.session
+
+				@calendar_id = create_user.calendars.first.id
+				# APIの仕様上calendarIdで入ってくるので追加している
+				# フロントの広範囲のリファクタリングが必要なためフロントをリファクタリングするときに変更する
+				calendar_hash[:calendarId] = @calendar_id
+
+				patch '/api/v1/calendar/' + @calendar_id.to_s, params: calendar_hash
+				@status = response.status
+			end
+			it 'カレンダーが更新されること' do
+				calendar = Calendar.find(@calendar_id)
+				expect( calendar.name ).to eq(calendar_hash[:name])
+				expect( calendar.description ).to eq(calendar_hash[:description])
+				expect( calendar.color ).to eq(calendar_hash[:color])
+				expect( calendar.shareBool ).to eq(calendar_hash[:shareBool])
+				expect( calendar.cloneBool ).to eq(calendar_hash[:cloneBool])
+				expect( calendar.author_id ).to eq(calendar_hash[:author_id])
+			end
+
+			it '200ステータスが帰ってくること' do
+				expect( @status ).to eq(200)
+			end
+		end
+		context 'サインインしていない時' do
+			it '401ステータスが帰ってくること' do
+				post '/api/v1/calendar'
+				expect(response.status).to eq(401)
+			end
+		end
+	end
+
 end
 
 
