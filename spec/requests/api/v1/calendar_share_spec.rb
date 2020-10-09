@@ -133,6 +133,25 @@ describe 'calendar_shareAPI' do
 			end
 		end
 	end
+
+	describe 'delete /api/v1/calendar_destroy_follow' do
+		before do
+			@params = '?key=' + create_calendar.users.first.key + '&session=' + create_calendar.users.first.session + '&calendarId=' + create_calendar.id.to_s
+		end
+		context 'サインインしている時' do
+			it 'フォローが削除されること' do
+				expect { delete '/api/v1/calendar_destroy_follow' + @params }.to change(UserCalendarRelation, :count).by(-1)
+				expect(response.status).to eq(200)
+			end
+		end
+
+		context 'サインインしていない時' do
+			it '401ステータスが帰ってくること' do
+				post '/api/v1/calendar_destroy_follow'
+				expect(response.status).to eq(401)
+			end
+		end
+	end
 end
 
 
