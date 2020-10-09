@@ -30,4 +30,28 @@ describe 'transfer_scheduleAPI' do
 			end
 		end
 	end
+
+	describe 'update /api/v1/user/:id' do
+		context 'サインインしている時' do
+			before do
+				@params ={
+					:key => create_user.key,
+					:session => create_user.session,
+					:name => 'test'
+				}
+			end
+
+			it '学年が更新されること' do
+				put '/api/v1/user/0', params: @params
+				expect( UserDetail.find_by(user_id: create_user.id).name ).to eq( @params[:name] )
+				expect(response.status).to eq(200)
+			end
+		end
+		context 'サインインしていない時' do
+			it '401ステータスが帰ってくること' do
+				put '/api/v1/calendar'
+				expect(response.status).to eq(401)
+			end
+		end
+	end
 end
