@@ -2,7 +2,7 @@ class Api::V1::NewsController < ApplicationController
   def index
     nihonUniversity_news = News.where(:base_title => "日本大学")
     news = nihonUniversity_news.map do |news|
-      news.push(
+      next(
         :title => news.title,
         :date => news.date,
         :link => news.link,
