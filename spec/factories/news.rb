@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :user do
+  factory :news do
     title { Faker::Lorem.sentence }
     date { Time.new.strftime("%Y-%m-%d") }
     link { 'https://example.example.com' }
