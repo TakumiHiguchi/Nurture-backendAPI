@@ -17,7 +17,7 @@ class Api::V1::TaskController < ApplicationController
   end
 
   def update
-    task = @calendar.tasks.find(params[:task_id])
+    task = @calendar.tasks.find(params[:id])
     if task.update(update_params)
       render :json => JSON.pretty_generate({
         :status => 'SUCCESS',
