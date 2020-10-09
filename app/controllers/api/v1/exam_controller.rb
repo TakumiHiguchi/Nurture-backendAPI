@@ -7,7 +7,7 @@ class Api::V1::ExamController < ApplicationController
     result = @calendar.exams.uniq_create(
       :title => params[:title],
       :content => params[:content],
-      :examdate => params[:examdate],
+      :examdate => params[:examDate],
       :position => params[:position]
     )
 
