@@ -53,4 +53,23 @@ describe 'examAPI' do
 			end
 		end
 	end
+
+	describe 'delete /api/v1/exam' do
+		context 'サインインしている時' do
+			before do
+				# keyとsessionを与えてログイン状態にする
+				@params = '?key=' + create_exam.users.first.key + '&session=' + create_exam.users.first.session + '&calendarId=' + create_exam.id.to_s + '&exam_id=' + create_exam.exams.first.id.to_s
+			end
+			it 'カレンダーが削除されること' do
+				expect { delete '/api/v1/exam' + @params }.to change(Exam, :count).by(-1)
+				expect(response.status).to eq(200)
+			end
+		end
+		context 'サインインしていない時' do
+			it '401ステータスが帰ってくること' do
+				post '/api/v1/calendar'
+				expect(response.status).to eq(401)
+			end
+		end
+	end
 end
