@@ -16,7 +16,7 @@ class Task < ApplicationRecord
   validates :position,:presence => true
 
   #アソシエーション
-  belongs_to :calendar
+  belongs_to :calendar, optional: true
 
   #カレンダーIDからTaskを取得して、配列に格納する
   def createDatekeyArrayOfTask(taskResult, calendar_id)

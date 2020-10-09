@@ -11,12 +11,12 @@ class Exam < ApplicationRecord
 
   #バリデーション
   validates :title,   :presence => true, :length => { :in => 1..150 }
-  validates :content,                 :length => { :in => 0..100000 }
+  validates :content,                    :length => { :in => 0..100000 }
   validates :examDate,:presence => true
   validates :position,:presence => true
 
   #アソシエーション
-  belongs_to :calendar
+  belongs_to :calendar, optional: true
 
   def self.uniq_create(props)
     errorJson = RenderErrorJson.new()

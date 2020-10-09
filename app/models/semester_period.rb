@@ -17,7 +17,7 @@ class SemesterPeriod < ApplicationRecord
   validates :late_semester_s, :presence => true
 
   #アソシエーション
-  belongs_to :calendar
+  belongs_to :calendar, optional: true
 
   def clone(newcalendar_id)
     SemesterPeriod.create(

@@ -105,6 +105,24 @@ describe 'calendarAPI' do
 		end
 	end
 
+	describe 'delete /api/v1/calendar' do
+		context 'サインインしている時' do
+			before do
+				# keyとsessionを与えてログイン状態にする
+				@params = '?key=' + create_user.key + '&session=' + create_user.session + '&calendarId=' + create_user.calendars.first.id.to_s
+			end
+			it 'カレンダーが削除されること' do
+				expect { delete '/api/v1/calendar' + @params }.to change(Calendar, :count).by(-1)
+				expect(response.status).to eq(200)
+			end
+		end
+		context 'サインインしていない時' do
+			it '401ステータスが帰ってくること' do
+				post '/api/v1/calendar'
+				expect(response.status).to eq(401)
+			end
+		end
+	end
 end
 
 

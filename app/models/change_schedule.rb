@@ -12,8 +12,8 @@ class ChangeSchedule < ApplicationRecord
   validates :position,    :presence => true
 
   # アソシエーション
-  belongs_to :schedule
-  belongs_to :calendar
+  belongs_to :schedule, optional: true
+  belongs_to :calendar, optional: true
     
 	def self.uniq_create(props)
 		errorJson = RenderErrorJson.new()

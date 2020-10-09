@@ -7,7 +7,7 @@ class TransferSchedule < ApplicationRecord
   # updated_at(datetime)  :precision => 6, :null => false
 
   #アソシエーション
-  belongs_to :calendar
+  belongs_to :calendar, optional: true
 
   def loadCL(transfer_schedules_before, transfer_schedules_after, calendar_id)
     dkArray = DateKeysArray.new
