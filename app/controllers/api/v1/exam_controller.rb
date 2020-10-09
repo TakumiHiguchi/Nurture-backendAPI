@@ -24,7 +24,7 @@ class Api::V1::ExamController < ApplicationController
 
   def update
     errorJson = RenderErrorJson.new()
-    exam = @calendar.exams.find(params[:exam_id])
+    exam = @calendar.exams.find(params[:id])
     if exam.update(update_params)
       render :json => JSON.pretty_generate({
         :status => 'SUCCESS',
@@ -55,7 +55,7 @@ class Api::V1::ExamController < ApplicationController
     return({
       :title => params[:title],
       :content => params[:content],
-      :examDate => params[:examdate],
+      :examDate => params[:examDate],
       :position => params[:position],
       :complete => params[:complete]
     })

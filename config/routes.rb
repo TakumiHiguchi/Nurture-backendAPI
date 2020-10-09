@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       resources :task ,:only => [:create,:update]
       delete 'task' => 'task#destroy'
       delete 'exam' => 'exam#destroy'
-      resources :exam ,:only => [:create,:update]
+      resources :exam ,:only => [:create, :update]
       delete 'change_schedule' => 'change_schedule#destroy'
       resources :change_schedule ,:only => [:index,:create]
       resources :news, :only => [:index]
