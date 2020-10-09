@@ -107,6 +107,32 @@ describe 'calendar_shareAPI' do
 			end
 		end
 	end
+
+	describe 'post /api/v1/calendar_follow' do
+		before do
+			@params = {
+				:calendarId => create_other_author_calendar.second.id,
+				:key => create_other_author_calendar.first.users.first.key,
+				:session => create_other_author_calendar.first.users.first.session
+			}
+		end
+		context 'サインインしている時' do
+			it 'カレンダーがフォローされること' do
+				expect( Calendar.last.calendar_schedule_relations.count ).to eq( create_calendar.calendar_schedule_relations.count )
+			end
+			it '200ステータスが帰ってくること' do
+				post '/api/v1/calendar_clone', params: @params
+				expect(response.status).to eq(200)
+			end
+		end
+
+		context 'サインインしていない時' do
+			it '401ステータスが帰ってくること' do
+				post '/api/v1/calendar'
+				expect(response.status).to eq(401)
+			end
+		end
+	end
 end
 
 
