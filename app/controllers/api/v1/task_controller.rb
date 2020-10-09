@@ -49,7 +49,7 @@ class Api::V1::TaskController < ApplicationController
     return({
       :title => params[:title],
       :content => params[:content],
-      :taskDate => params[:taskdate],
+      :taskDate => params[:taskDate],
       :position => params[:position]
     })
   end
@@ -58,7 +58,7 @@ class Api::V1::TaskController < ApplicationController
     return({
       :title => params[:title],
       :content => params[:content],
-      :taskDate => params[:taskdate],
+      :taskDate => params[:taskDate],
       :position => params[:position],
       :complete => params[:complete]
     })
