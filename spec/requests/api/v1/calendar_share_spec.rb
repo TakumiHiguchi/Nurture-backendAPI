@@ -4,7 +4,6 @@ describe 'calendar_shareAPI' do
 	let(:create_calendar){ FactoryBot.create(:with_all_element) }
 	let(:create_other_author_calendar){ FactoryBot.create_list(:with_all_element, 2) }
 
-
 	describe 'get /api/v1/calendar_search' do
 		context 'サインインしている時' do
 			context 'DBにユーザーのカレンダーしかなかった時' do
