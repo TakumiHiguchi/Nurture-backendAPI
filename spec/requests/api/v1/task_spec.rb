@@ -53,4 +53,23 @@ describe 'taskAPI' do
 			end
 		end
 	end
+
+	describe 'delete /api/v1/task' do
+		context 'サインインしている時' do
+			before do
+				# keyとsessionを与えてログイン状態にする
+				@params = '?key=' + create_task.users.first.key + '&session=' + create_task.users.first.session + '&calendarId=' + create_task.id.to_s + '&task_id=' + create_task.tasks.first.id.to_s
+			end
+			it 'カレンダーが削除されること' do
+				expect { delete '/api/v1/task' + @params }.to change(Task, :count).by(-1)
+				expect(response.status).to eq(200)
+			end
+		end
+		context 'サインインしていない時' do
+			it '401ステータスが帰ってくること' do
+				post '/api/v1/calendar'
+				expect(response.status).to eq(401)
+			end
+		end
+	end
 end
