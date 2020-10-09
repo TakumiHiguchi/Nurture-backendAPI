@@ -58,6 +58,6 @@ FactoryBot.define do
       :with_change_schedule,
       :with_semester_period,
       :with_transfer_schedule
-		]		
+    ]
   end
 end
