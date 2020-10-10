@@ -29,6 +29,7 @@ FactoryBot.define do
     trait :with_schedule do
       after(:create) do |calendar|
         calendar.schedules << create(:schedule)
+        calendar.calendar_schedule_relations.first.update(reges_grade: 1)
       end
     end
 
