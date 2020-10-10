@@ -18,6 +18,7 @@ N:urtureのbackendAPIです。頑張ってリファクタリングしていま�
   
 3. dockerちゃんに全てお任せしましょう
   ```
+  $ docker-compose build
   $ docker-compose up
   ```
 

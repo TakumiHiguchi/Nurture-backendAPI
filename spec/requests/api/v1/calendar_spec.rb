@@ -124,6 +124,3 @@ describe 'calendarAPI' do
 		end
 	end
 end
-
-
-
