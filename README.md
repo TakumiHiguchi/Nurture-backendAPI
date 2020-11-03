@@ -22,5 +22,4 @@ N:urtureのbackendAPIです。頑張ってリファクタリングしていま�
   $ docker-compose up
   ```
 
-4. N:urture（frontend）を起動しましょう。
-  [https://github.com/TakumiHiguchi/Nurture-front](url)を見て頑張ってください
+4. [nurture](https://github.com/TakumiHiguchi/Nurture-front)を起動しましょう。
