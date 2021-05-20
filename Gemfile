@@ -10,7 +10,7 @@ gem 'jwt'
 gem 'url_safe_base64'
 
 #サーバ
-gem 'puma', '~> 4.1'
+gem 'puma', '~> 4.3'
 
 #CORS
 gem 'rack-cors'
